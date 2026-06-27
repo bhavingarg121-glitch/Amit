@@ -527,4 +527,157 @@ Behind every successful journey is a mentor who believes in your potential even 
 
 
 </body>
+    <script>
+    /* Reveal Animation */
+
+.hidden{
+opacity:0;
+transform:translateY(70px);
+transition:1s ease;
+}
+
+.show{
+opacity:1;
+transform:translateY(0);
+}
+
+/* Active Navbar */
+
+nav ul li a.active{
+color:#2563eb;
+font-weight:700;
+}
+
+/* Loader */
+
+#loader{
+position:fixed;
+inset:0;
+background:white;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:99999;
+transition:.5s;
+}
+
+.spinner{
+width:65px;
+height:65px;
+border-radius:50%;
+border:6px solid #e5e7eb;
+border-top:6px solid #2563eb;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+
+100%{
+transform:rotate(360deg);
+}
+
+}
+
+/* Scroll Button */
+
+#topBtn{
+position:fixed;
+right:30px;
+bottom:30px;
+width:55px;
+height:55px;
+border:none;
+border-radius:50%;
+background:#2563eb;
+color:white;
+font-size:22px;
+display:none;
+justify-content:center;
+align-items:center;
+cursor:pointer;
+box-shadow:0 10px 25px rgba(0,0,0,.25);
+transition:.3s;
+z-index:999;
+}
+
+#topBtn:hover{
+transform:translateY(-5px);
+}
+
+/* Ripple */
+
+.btn{
+position:relative;
+overflow:hidden;
+}
+
+.ripple{
+position:absolute;
+width:10px;
+height:10px;
+background:rgba(255,255,255,.6);
+border-radius:50%;
+transform:translate(-50%,-50%);
+animation:ripple .6s linear;
+}
+
+@keyframes ripple{
+
+from{
+width:0;
+height:0;
+opacity:.8;
+}
+
+to{
+width:400px;
+height:400px;
+opacity:0;
+}
+
+}
+
+/* Cursor Glow */
+
+#cursorGlow{
+position:fixed;
+width:280px;
+height:280px;
+background:radial-gradient(circle,rgba(37,99,235,.13),transparent 70%);
+pointer-events:none;
+transform:translate(-50%,-50%);
+z-index:-1;
+filter:blur(10px);
+}
+
+/* Floating Animation */
+
+.hero img,
+.mentor img{
+animation:floatImage 6s ease-in-out infinite;
+}
+
+@keyframes floatImage{
+
+0%,100%{
+transform:translateY(0);
+}
+
+50%{
+transform:translateY(-15px);
+}
+
+}
+
+/* Timeline Hover */
+
+.box{
+transition:.4s;
+}
+
+.box:hover{
+transform:translateY(-10px) scale(1.03);
+box-shadow:0 20px 45px rgba(37,99,235,.15);
+}
+    </script>
 </html>
