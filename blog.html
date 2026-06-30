@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>0 to 1 — Unfiltered Engineering College Life</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root{
+    --bg: #14181f;
+    --bg-soft: #1b212b;
+    --paper: #1f2630;
+    --ink: #e9e4d8;
+    --ink-dim: #9aa3ad;
+    --lamp: #ffb347;
+    --lamp-dim: #cf8a2c;
+    --line: #2c3440;
+    --red: #d9684f;
+    --green: #6fae8a;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+  @font-face{
+    font-family:'Fraunces';
+    src: local('Georgia');
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family: Georgia, 'Iowan Old Style', serif;
+    line-height:1.7;
+    overflow-x:hidden;
+  }
+
+  /* lamp cursor glow */
+  #lamp-glow{
+    position:fixed;
+    width:520px;height:520px;
+    border-radius:50%;
+    pointer-events:none;
+    background: radial-gradient(circle, rgba(255,179,71,0.10) 0%, rgba(255,179,71,0.04) 35%, transparent 70%);
+    transform:translate(-50%,-50%);
+    z-index:1;
+    transition: opacity .3s;
+  }
+
+  ::selection{background:var(--lamp); color:#1a1a1a;}
+
+  a{color:var(--lamp);}
+
+  .wrap{max-width:780px; margin:0 auto; padding:0 24px; position:relative; z-index:2;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:relative;
+    padding:80px 24px 60px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(255,179,71,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,179,71,0.025) 1px, transparent 1px);
+    background-size: 38px 38px;
+    pointer-events:none;
+  }
+  .kicker{
+    font-family:var(--mono);
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--lamp-dim);
+    font-size:12px;
+    margin-bottom:18px;
+    opacity:0;
+    animation: fadeUp .8s ease forwards .1s;
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 7vw, 4.4rem);
+    line-height:1.04;
+    margin:0 0 22px;
+    max-width:760px;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    opacity:0;
+    animation: fadeUp .9s ease forwards .25s;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--lamp);
+    font-weight:400;
+  }
+  .hero .sub{
+    font-size:1.18rem;
+    color:var(--ink-dim);
+    max-width:620px;
+    font-style:italic;
+    opacity:0;
+    animation: fadeUp .9s ease forwards .45s;
+  }
+  .hero .meta{
+    margin-top:48px;
+    display:flex; gap:28px; flex-wrap:wrap;
+    font-family:var(--mono); font-size:12.5px; color:var(--ink-dim);
+    opacity:0;
+    animation: fadeUp .9s ease forwards .65s;
+  }
+  .hero .meta span b{color:var(--lamp); font-weight:600;}
+
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(18px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .scroll-cue{
+    position:absolute; bottom:36px; left:24px;
+    font-family:var(--mono); font-size:11px; color:var(--ink-dim);
+    display:flex; align-items:center; gap:10px;
+    opacity:0; animation:fadeUp 1s ease forwards 1s;
+  }
+  .scroll-cue .bar{width:1px; height:34px; background:linear-gradient(var(--lamp), transparent); animation:dropline 1.8s infinite;}
+  @keyframes dropline{0%{opacity:0;transform:translateY(-10px);}40%{opacity:1;}100%{opacity:0;transform:translateY(10px);}}
+
+  /* ---------- SECTION GENERIC ---------- */
+  section{
+    padding:90px 0;
+    position:relative;
+  }
+  .section-head{
+    margin-bottom:50px;
+    border-left:2px solid var(--lamp-dim);
+    padding-left:20px;
+  }
+  .section-eyebrow{
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.15em; text-transform:uppercase;
+    color:var(--lamp-dim); margin-bottom:8px;
+  }
+  .section-head h2{
+    font-size:clamp(1.7rem,4vw,2.5rem); margin:0; font-weight:600; letter-spacing:-0.01em;
+  }
+
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity .8s ease, transform .8s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  p{margin:0 0 20px; color:#d8d2c4;}
+  p.lead{font-size:1.12rem; color:var(--ink);}
+
+  .divider{
+    text-align:center; color:var(--lamp-dim); font-family:var(--mono); letter-spacing:.4em;
+    margin:60px 0; font-size:12px; opacity:.7;
+  }
+
+  /* margin notes (handwritten-feel asides) */
+  .note{
+    background:var(--paper);
+    border-left:3px solid var(--lamp);
+    padding:16px 20px;
+    margin:28px 0;
+    border-radius:0 6px 6px 0;
+    font-size:.96rem;
+    color:var(--ink-dim);
+  }
+  .note b{color:var(--lamp);}
+
+  /* ---------- YEAR TIMELINE (notebook tabs) ---------- */
+  .year-block{
+    position:relative;
+    padding:42px 28px;
+    margin-bottom:36px;
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+  }
+  .year-block::before{
+    content: attr(data-num);
+    position:absolute;
+    top:-30px; right:-10px;
+    font-family:var(--mono);
+    font-size:130px;
+    font-weight:700;
+    color:rgba(255,179,71,0.045);
+    line-height:1;
+    pointer-events:none;
+  }
+  .year-tag{
+    display:inline-block;
+    font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+    color:#101418; background:var(--lamp);
+    padding:4px 10px; border-radius:3px; margin-bottom:16px;
+  }
+  .year-block h3{
+    font-size:1.55rem; margin:0 0 16px; font-weight:600;
+  }
+  .promise{
+    margin-top:22px; padding:14px 18px;
+    background:rgba(255,179,71,0.06);
+    border:1px dashed var(--lamp-dim);
+    border-radius:6px;
+    font-family:var(--mono); font-size:.85rem; color:var(--lamp);
+    display:inline-block;
+  }
+
+  /* ---------- DATA / STATS ---------- */
+  .stat-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:14px; margin:30px 0 8px;
+  }
+  .stat-card{
+    background:var(--bg-soft); border:1px solid var(--line); border-radius:8px;
+    padding:18px; text-align:left;
+  }
+  .stat-card .num{
+    font-family:var(--mono); font-size:1.6rem; color:var(--lamp); font-weight:700; display:block;
+  }
+  .stat-card .label{font-size:.78rem; color:var(--ink-dim); margin-top:4px; display:block;}
+
+  table{width:100%; border-collapse:collapse; margin:26px 0; font-family:var(--mono); font-size:.88rem;}
+  th, td{ text-align:left; padding:10px 12px; border-bottom:1px solid var(--line);}
+  th{color:var(--lamp-dim); font-weight:600; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em;}
+  td{color:var(--ink);}
+  tr:hover td{background:rgba(255,179,71,0.04);}
+
+  .bar-row{display:flex; align-items:center; gap:12px; margin:10px 0; font-family:var(--mono); font-size:.85rem;}
+  .bar-label{width:64px; flex-shrink:0; color:var(--ink-dim);}
+  .bar-track{flex:1; height:10px; background:var(--bg-soft); border-radius:5px; overflow:hidden; border:1px solid var(--line);}
+  .bar-fill{height:100%; background:linear-gradient(90deg, var(--lamp-dim), var(--lamp)); width:0%; border-radius:5px; transition:width 1.4s cubic-bezier(.2,.9,.3,1);}
+  .bar-fill.in{ }
+  .bar-val{width:50px; text-align:right; color:var(--lamp);}
+
+  .iit-line{display:flex; justify-content:space-between; font-family:var(--mono); font-size:.85rem; padding:9px 0; border-bottom:1px dotted var(--line); color:var(--ink-dim);}
+  .iit-line b{color:var(--ink);}
+
+  .callout-number{
+    font-family:var(--mono); font-weight:700; font-size:2.6rem; color:var(--red);
+  }
+
+  /* ---------- PATHS / CARDS ---------- */
+  .path-grid{display:flex; flex-direction:column; gap:18px;}
+  .path-card{
+    background:var(--bg-soft); border:1px solid var(--line); border-radius:10px; padding:26px 28px;
+    position:relative; transition:border-color .3s, transform .3s;
+  }
+  .path-card:hover{border-color:var(--lamp-dim); transform:translateX(4px);}
+  .path-card .pnum{font-family:var(--mono); color:var(--lamp-dim); font-size:.78rem; letter-spacing:.1em;}
+  .path-card h4{margin:6px 0 10px; font-size:1.25rem;}
+  .path-card .skip{font-family:var(--mono); font-size:.74rem; color:var(--ink-dim); float:right; border:1px solid var(--line); padding:3px 9px; border-radius:20px;}
+
+  .gate-highlight{
+    border-color:var(--green);
+    background:linear-gradient(135deg, rgba(111,174,138,0.08), var(--bg-soft));
+  }
+  .gate-highlight .pnum{color:var(--green);}
+
+  blockquote{
+    font-style:italic; font-size:1.3rem; color:var(--lamp);
+    border-left:3px solid var(--lamp); padding-left:22px; margin:34px 0;
+    line-height:1.5;
+  }
+
+  /* sticky-note style */
+  .sticky{
+    background:#2a2418;
+    color:#f3d9a0;
+    padding:18px 20px;
+    border-radius:2px;
+    font-family:var(--mono); font-size:.9rem;
+    transform:rotate(-1deg);
+    box-shadow:0 8px 22px rgba(0,0,0,0.35);
+    margin:30px 0;
+    border-top:3px solid var(--lamp);
+  }
+
+  .signoff{
+    margin-top:60px;
+    padding-top:36px;
+    border-top:1px solid var(--line);
+    font-family:var(--mono); font-size:.85rem; color:var(--ink-dim);
+  }
+  .signoff .name{color:var(--lamp); font-size:1.05rem; font-family:Georgia,serif; font-style:italic;}
+
+  .cta-row{display:flex; gap:14px; flex-wrap:wrap; margin-top:24px;}
+  .btn{
+    display:inline-block; font-family:var(--mono); font-size:.85rem;
+    padding:12px 22px; border-radius:6px; text-decoration:none;
+    border:1px solid var(--lamp-dim); color:var(--lamp); transition:all .25s;
+  }
+  .btn:hover{background:var(--lamp); color:#14181f;}
+  .btn.solid{background:var(--lamp); color:#14181f;}
+  .btn.solid:hover{background:var(--lamp-dim);}
+
+  footer{
+    padding:50px 0 80px;
+    text-align:center;
+    color:var(--ink-dim);
+    font-family:var(--mono);
+    font-size:.78rem;
+  }
+
+  /* progress bar at top = "ink fill" */
+  #progress{
+    position:fixed; top:0; left:0; height:3px; background:var(--lamp);
+    width:0%; z-index:50; transition:width .1s linear;
+    box-shadow:0 0 12px var(--lamp);
+  }
+
+  ::-webkit-scrollbar{width:9px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:var(--line); border-radius:5px;}
+  ::-webkit-scrollbar-thumb:hover{background:var(--lamp-dim);}
+
+  @media(max-width:640px){
+    section{padding:60px 0;}
+    .year-block{padding:30px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="lamp-glow"></div>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">A late-night write-up · PCE Nagpur → IIT Kanpur</div>
+    <h1>0 to 1 : <em>Unfiltered</em><br>Engineering College Life</h1>
+    <p class="sub">Raw, real, honest, unbiased & complete — four years of engineering, told the way nobody tells it during admission season.</p>
+    <div class="meta">
+      <span>Author <b>Amit Taksande</b></span>
+      <span>Branch <b>Computer Technology</b></span>
+      <span>Journey <b>PCE '22–'26 → IITK M.Tech '26–'28</b></span>
+    </div>
+  </div>
+  <div class="scroll-cue"><div class="bar"></div>keep scrolling</div>
+</header>
+
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="intro">
+    <div class="reveal">
+      <p class="lead">So you're either about to start engineering, or you've already taken admission in a Tier-2 or Tier-3 college — maybe in 1st year, maybe in final year — wondering what the next few years actually look like. Maybe you're excited. Maybe you're nervous. Maybe you're comparing yourself to students from IITs and NITs, or simply trying to figure out whether engineering is worth the time, effort, and sacrifices you're about to make.</p>
+      <p>This is that guide.</p>
+      <p>I'll try to cover everything that genuinely matters — academics, skills, internships, placements, friendships, opportunities, mistakes, personal growth, and the reality of studying in a Tier-3 college. I'll also talk about things nobody tells you during admission season, but that end up having the biggest impact on your college life. Things not mentioned in the academic brochure.</p>
+      <div class="note">One more thing — throughout my engineering journey, I didn't focus on just one path. Alongside college academics, I prepared for placements, government jobs, CAT <em>and</em> GATE at once. <b>This was a major mistake.</b> So everything here doesn't come from theory, YouTube motivation, or hearsay — it comes from my own experience, failures, and lessons learned.</p></div>
+      <p>I'll try my best to be 100% honest. No sugarcoating, no fake motivation, no unrealistic success stories, no drama. Just real experiences, observations, lessons, mistakes — and everything I wish someone had told me when I was in your position.</p>
+      <p>I know this is going to be a little long, but by the end, I'll try to make sure every second you spend reading it adds value to your engineering journey.</p>
+    </div>
+  </section>
+
+  <div class="divider reveal">· · ·</div>
+
+  <!-- ============ SECTION 1 ============ -->
+  <section id="s1">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Section 1</div>
+      <h2>Most Tier-3 Engineering Students Will Relate to This</h2>
+    </div>
+
+    <div class="year-block reveal" data-num="01">
+      <span class="year-tag">First Year</span>
+      <h3>The Honeymoon Period</h3>
+      <p>Almost everyone enters college with excitement, curiosity, and a head full of expectations. Some students come from towns like Chandrapur, Gondia, Amravati; many are from Nagpur itself. Regardless of where they come from, most believe college is going to completely change their lives.</p>
+      <p>You'll meet every mindset imaginable: some convinced they'll graduate with the highest package, some already dreaming of starting the next big business, a few with clear plans for GATE or government jobs — and some who never wanted engineering in the first place but joined because their parents encouraged, or forced, them to.</p>
+      <p>This is usually when you make the most friends — hours in classrooms, canteens, practical labs, corridors. Some of these friendships last all four years; others vanish by next year.</p>
+      <p>Academically, everyone starts with enthusiasm. High CGPA, regular study, that famous 75% attendance — for a few weeks, notebooks are neat and motivation is sky-high.</p>
+      <p>But slowly, reality sets in. A large number of students eventually find themselves watching "Complete Unit in 15 Minutes" videos from YouTube the night before an exam. Somehow these become the unofficial professors for half the batch during exam season.</p>
+      <p>And many end up trying to impress that one person they find interesting.</p>
+      <div class="note"><b>Relationship advice:</b> I'm honestly not the right person to give a fully balanced take here, but — do you want a partner because others have one, because you liked their beauty and not their heart, or because you want to show off how good they look? Be honest with yourself. There's no shame in being in a relationship, but from four years of watching this play out: 70–80% of relationships end by final year, and choosing the wrong person can end up wasting your entire four years. The decision is yours.</div>
+    </div>
+
+    <div class="year-block reveal" data-num="02">
+      <span class="year-tag">Second Year</span>
+      <h3>Exploration Time</h3>
+      <p>If first year was the honeymoon period, second year is where reality slowly starts knocking. You finally enter your branch with excitement, expecting to learn how real-world systems work and start feeling like an actual engineer.</p>
+      <p>For many, it doesn't go exactly as planned. Every subject is new — new terminology, new concepts, sometimes a completely different teaching style. There will be lectures where you sit for an hour and walk out wondering what was even taught. Many students hit their lowest CGPA somewhere in this phase, because the jump from first-year common subjects to branch-specific ones isn't always smooth.</p>
+      <p>At the same time, something interesting starts happening — you begin exploring your own boundaries. Some start coding, some prepare for competitive programming, some join technical events, a few discover GATE, only a handful think about MBA, government exams, higher studies, freelancing, startups, or internships — usually with very limited knowledge of what's actually right for them.</p>
+      <p>You'll notice everyone seems to be doing something different. One friend's into web dev, another's prepping for GATE, someone's into sports, someone else is already talking startups. <em>(By the end of fourth year you'll realize — no one was really doing anything extraordinary. Everyone was just doing what they felt they were "supposed" to do.)</em></p>
+      <p>Second year is less about mastering a skill and more about discovering what genuinely interests you. You'll try things, quit some, fail at others, and hopefully land on one or two that stick.</p>
+      <blockquote>"Next semester se pakka padhunga."</blockquote>
+    </div>
+
+    <div class="year-block reveal" data-num="03">
+      <span class="year-tag">Third Year</span>
+      <h3>The Wake-Up Call</h3>
+      <p>This is usually when students realize how far behind they are in the placement race. The same people who spent two years saying "abhi toh time hai" suddenly discover placements aren't far away. Everyone seems to be learning something — DSA, projects, web development, aptitude, internships, referrals.</p>
+      <p>For many, this is when panic begins. You enroll in courses, build projects, fix your resume, try to understand what companies actually expect. Time feels like it's running faster than before. "How did two years pass so quickly?"</p>
+      <p>But third year isn't only about careers. This is also when many become active in technical clubs, cultural bodies, and student organizations — proudly updating LinkedIn with "Selected as XYZ Coordinator," hosting events, managing freshers' programs, getting closer to seniors and faculty.</p>
+      <p>Your friend circle shrinks — not from fights, but because everyone moves in a different direction. This is also the year of college trips, late-night career talks, group projects, internship applications, and a hundred conversations starting with "Bro, what are your plans after engineering?"</p>
+      <p>And then there's the largest group — students still living in a comfortable illusion. They know placements are coming, they know skills matter, they know competition exists — but they keep postponing action because somewhere deep down they believe there's still plenty of time.</p>
+      <div class="note">Third year is probably the most important year of engineering. The habits, skills, and decisions made here shape your final year — and often your first job or higher-education path.</div>
+    </div>
+
+    <div class="year-block reveal" data-num="04">
+      <span class="year-tag">Final Year</span>
+      <h3>The Final Chapter</h3>
+      <p>Now everything feels like it's coming to an end. Nothing new left to discover — only unfinished battles to fight. Four years gone, and you're standing at the edge of graduation, suddenly.</p>
+      <p>This is when reality hits hardest. The final-year project begins, and everyone expects it to be unique, innovative — "you're an engineer, after all." But underneath, many students feel completely helpless, confidence fading, every decision feeling heavier.</p>
+      <p>Placement season arrives at the same time. Aptitude tests, coding rounds, interviews, lectures, assignments, exams — all at once. Every day a race against time, most days ending in confusion.</p>
+      <p>You start distancing from the friends who were once part of your everyday life — not from dislike, but because everyone is fighting their own battle now. The dreams from first year — the startup, the revolutionary app, becoming the next tech icon — collide with reality, suddenly much farther away.</p>
+      <p>And then comes the most painful thought:</p>
+      <blockquote>"What if I am just average?"</blockquote>
+      <p>After four years, many feel they have no extraordinary skill, no remarkable achievement, no clear direction. Confidence replaced by self-doubt and the weight of social pressure.</p>
+      <p>The dream package is gone. The dream company is gone. And suddenly the only option left seems to be a ₹4 LPA job.</p>
+      <div class="sticky">But this is where most students misunderstand the story.<br><br>Final year is not the chapter where dreams end.<br>It is the chapter where <u>illusions</u> end.</div>
+    </div>
+  </section>
+
+  <div class="divider reveal">· · ·</div>
+
+  <!-- ============ SECTION 2 ============ -->
+  <section id="s2">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Section 2</div>
+      <h2>Reality Check</h2>
+    </div>
+
+    <div class="reveal">
+      <p class="lead">If you're not from PCE Nagpur, you can probably still relate to your own college's placement story. In this section I don't want opinions — let's go with data. The real picture that no one shows you, and one that hits harder than anything else. Something that's not in the academic brochure.</p>
+      <p><b style="color:var(--ink)">Department:</b> Computer Technology — one of PCE's leading departments<br>
+      <b style="color:var(--ink)">Total strength:</b> ~120 students per batch (±10, due to direct second-year admissions / DC)</p>
+      <p>I'm from the 2026 batch, so here's the placement scenario for Computer Technology, PCE Nagpur — likely similar for other "soft" branches too. Don't expect it to be wildly different.</p>
+    </div>
+
+    <h4 class="reveal" style="font-family:var(--mono); font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--lamp-dim); margin-top:40px;">Package-wise distribution — 2026 batch</h4>
+    <div class="stat-grid reveal">
+      <div class="stat-card"><span class="num">8</span><span class="label">₹4.25 LPA (girls only)</span></div>
+      <div class="stat-card"><span class="num">5</span><span class="label">₹4.00 LPA</span></div>
+      <div class="stat-card"><span class="num">1</span><span class="label">₹3.00 LPA</span></div>
+      <div class="stat-card"><span class="num">3</span><span class="label">₹2.80 LPA</span></div>
+      <div class="stat-card"><span class="num">3</span><span class="label">₹2.50 LPA</span></div>
+    </div>
+
+    <div class="reveal">
+      <table>
+        <thead><tr><th>Company</th><th>Students placed</th></tr></thead>
+        <tbody>
+          <tr><td>Capgemini (girls-only off-campus)</td><td>8</td></tr>
+          <tr><td>Cognizant</td><td>5</td></tr>
+          <tr><td>Sphere Skill Knowledge</td><td>3</td></tr>
+          <tr><td>Arch IT Service</td><td>3</td></tr>
+          <tr><td>ExcelR EdTech Private</td><td>1</td></tr>
+        </tbody>
+      </table>
+      <p style="font-family:var(--mono); color:var(--red); font-size:1.1rem;">Total placed: <b>20 / 120</b> students</p>
+    </div>
+
+    <h4 class="reveal" style="font-family:var(--mono); font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--lamp-dim); margin-top:48px;">Historical placement % — CT, PCE</h4>
+    <div class="reveal" id="bars">
+      <div class="bar-row"><span class="bar-label">2023</span><div class="bar-track"><div class="bar-fill" data-pct="33.3"></div></div><span class="bar-val">33.3%</span></div>
+      <div class="bar-row"><span class="bar-label">2024</span><div class="bar-track"><div class="bar-fill" data-pct="22.5"></div></div><span class="bar-val">22.5%</span></div>
+      <div class="bar-row"><span class="bar-label">2025</span><div class="bar-track"><div class="bar-fill" data-pct="34.2"></div></div><span class="bar-val">34.2%</span></div>
+      <div class="bar-row"><span class="bar-label">2026</span><div class="bar-track"><div class="bar-fill" data-pct="16.7"></div></div><span class="bar-val">16.7%</span></div>
+    </div>
+
+    <div class="reveal">
+      <p>And this is one of PCE's <em>best</em> software-related branches. Core branches can be even more challenging.</p>
+      <p>At this point, many of you will start asking the difficult question:</p>
+      <blockquote>"Did I make the right decision?"</blockquote>
+      <p>After investing ₹12–13 lakhs (more, if you're a girl), four years, countless weekends, assignments, exams, and opportunities — is a ₹4 LPA job really worth it? And that's assuming you get placed at all. Five to ten years ago, colleges were giving the same package — after this much inflation and rising living costs, getting the same offer today means you need to think twice.</p>
+      <p>These questions are completely natural. Almost every final-year student asks them at some point. But before you jump to conclusions — take a deep breath. Hold on.</p>
+      <p style="font-style:italic; color:var(--lamp);">Amit Bhaiya is here to share a few things four years of engineering taught him — lessons that don't appear in placement statistics, salary packages, or LinkedIn posts.</p>
+    </div>
+  </section>
+
+  <div class="divider reveal">· · ·</div>
+
+  <!-- ============ SECTION 3 ============ -->
+  <section id="s3">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Section 3</div>
+      <h2>Opportunities That Open Up After Engineering</h2>
+    </div>
+
+    <div class="note reveal">
+      <b>Disclaimer:</b> This section isn't for everyone — skip it if you've already decided what you want to do.<br><br>
+      It's for those with a bigger aim in life — a good package.<br>
+      It's for those who refuse to settle for an average life.<br>
+      It's for those without a strong financial background.<br>
+      It's for those hungry to work hard and change their circumstances.<br><br>
+      If that's you — keep reading.
+    </div>
+
+    <div class="path-grid reveal">
+
+      <div class="path-card">
+        <span class="skip">skip if not your priority</span>
+        <span class="pnum">Path 01</span>
+        <h4>UPSC</h4>
+        <p>The most famous and prestigious career path in India — but not for everyone. Not because you can't crack it, but because UPSC demands far more than intelligence: years of consistency, the right strategy, guidance, family support, and financial stability to survive the preparation phase. Many spend 4–5 years preparing for a single exam, and most don't clear it on the first few attempts.</p>
+        <p>One of my relatives has been preparing for 5–6 years and is still trying — and he's not even average, the exam itself is that competitive. Even candidates who become IPS officers can fail the Prelims on a repeat attempt. Choose UPSC only if you fully understand the risk and the uncertainty of the journey.</p>
+      </div>
+
+      <div class="path-card">
+        <span class="skip">skip if not your priority</span>
+        <span class="pnum">Path 02</span>
+        <h4>Railways, SSC, Banking & Other Government Jobs</h4>
+        <p>I won't pretend to know every detail of every exam, but one thing's common: they all take time, patience, and consistent preparation. Competition is high — lakhs apply every year. But government jobs remain one of the most respected career options in India, offering a stable path for those willing to put in the effort.</p>
+        <p>Right now, with fewer responsibilities, private-sector salaries may look more attractive. But priorities change with time — many eventually value job security, work-life balance, and peace of mind over constant corporate pressure.</p>
+      </div>
+
+      <div class="path-card">
+        <span class="skip">skip if not your priority</span>
+        <span class="pnum">Path 03</span>
+        <h4>MBA</h4>
+        <p>A good option — but mostly if you do it from a top college: IIMs, IITs (yes, they offer MBAs too), FMS Delhi, XLRI, SPJIMR. Getting in usually requires cracking CAT, which takes 1–2 years of serious preparation, and even then admission isn't guaranteed given the competition.</p>
+        <p>CAT is open to every background — B.Com, B.A., Medical, Engineering, CA, and more — which makes it tougher, especially for GEM (General Engineer Male) candidates. Even picking the "wrong" question set on exam day can swing your result. Most students at top MBA colleges aren't freshers either; many recommend gaining work experience first.</p>
+        <p>And the cost: a top MBA can run ₹20–30 lakh (₹30–35 lakh for the very top tier, over two years). Decide based on preparation time, admission stats, placement outcomes, and ROI — not assumptions.</p>
+      </div>
+
+      <div class="path-card">
+        <span class="skip">skip if not your priority</span>
+        <span class="pnum">Path 04</span>
+        <h4>MS Abroad</h4>
+        <p>Opens up better research facilities, global exposure, higher salaries, and a career outside India — a great option if you want to explore opportunities beyond your borders.</p>
+        <p>I'd mainly recommend this if you have a strong financial background or a clear funding plan. Even before admission you may spend ₹3–4 lakh on exams, applications, coaching, and document processing — and total costs go far higher depending on the country and university.</p>
+        <p>Research rankings, tuition, scholarships, living costs, visa rules, job opportunities and ROI carefully before deciding.</p>
+      </div>
+
+      <div class="path-card">
+        <span class="pnum">Path 05</span>
+        <h4>Off-Campus Placements</h4>
+        <p>A completely different game. Not impossible — but definitely difficult. With the right competence, guidance, planning, and skills, it's absolutely doable; many students (maybe not from my college, but elsewhere) have landed great off-campus roles.</p>
+        <p>But I've also seen the other side. One of my batchmates — ranked #1 in our institute on GfG — still ended up with a ₹4 LPA job, still waiting on his joining letter (best wishes to him). Around 80% of my batchmates are still sitting at home. Some joined coaching institutes post-B.Tech to land a job, a few took a drop for GATE aiming for an IIT, some are even ready to take up sales jobs just to start earning — and living at home after B.Tech comes with a mental pressure you won't realize until you're there.</p>
+        <p>Most companies that visited our campus were sales or marketing-oriented; only a small fraction were actual IT companies. I'm not saying this to discourage anyone — with the right skills, guidance, and network, off-campus can absolutely work out better. Just do the research first, whatever path you choose.</p>
+      </div>
+
+      <div class="path-card gate-highlight">
+        <span class="pnum">Path 06 · hidden gem</span>
+        <h4>GATE — Graduate Aptitude Test in Engineering</h4>
+        <p>One of the most underrated opportunities for engineering students, especially from Tier-3 colleges. GATE is a direct pathway into IITs, NITs, and IISc. An M.Tech there usually costs only ₹2–3 lakh for two years, plus a stipend of ₹12,400/month — a huge financial relief. More importantly, it puts you in a room with some of the brightest minds in the country for two years, with a network and opportunities a Tier-3 college simply can't offer.</p>
+        <p>Many people leave their jobs just to prepare for GATE — you still have time during college. Moving from a Tier-3 college to a top IIT through GATE can be one of the biggest career upgrades possible, rather than settling for a ₹4 LPA job. The IIT tag helps — not because it guarantees success, but because it opens doors to better professors, alumni networks, and industry connections.</p>
+        <p>GATE also opens government job routes — PSUs, research orgs, ISRO, BARC, DRDO — many tied directly to GATE scores, especially for core branches. Even for CS, a top rank opens 50+ documented opportunities (credit to Rishi Bhaiya for that sheet). And unlike CAT, GATE is restricted to engineers only. Look at all the options and the actual data before deciding anything.</p>
+      </div>
+
+    </div>
+
+    <h4 class="reveal" style="font-family:var(--mono); font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--lamp-dim); margin-top:56px;">A small note on IIT placements</h4>
+    <div class="reveal">
+      <p>I don't have placement data for every IIT — and I always prefer to go with data over assumption. Here's what I gathered for the <b style="color:var(--ink)">M.Tech CSE, IIT Kanpur (2026 batch)</b>:</p>
+    </div>
+    <div class="reveal" id="iit-data">
+      <div class="iit-line"><span>Above ₹50 LPA</span><b>8 students</b></div>
+      <div class="iit-line"><span>Above ₹30 LPA</span><b>23 students</b></div>
+      <div class="iit-line"><span>Above ₹25 LPA</span><b>33 students</b></div>
+      <div class="iit-line"><span>Above ₹20 LPA</span><b>37 students</b></div>
+      <div class="iit-line"><span>Above ₹15 LPA</span><b>51 students</b></div>
+    </div>
+    <div class="stat-grid reveal" style="margin-top:24px;">
+      <div class="stat-card"><span class="num">83 LPA</span><span class="label">Highest package</span></div>
+      <div class="stat-card"><span class="num">10 LPA</span><span class="label">Lowest package</span></div>
+      <div class="stat-card"><span class="num">27 LPA</span><span class="label">Average package</span></div>
+      <div class="stat-card"><span class="num">100%</span><span class="label">Placement rate</span></div>
+    </div>
+    <div class="reveal">
+      <p style="margin-top:24px;">Important: these numbers are cumulative — "33 students above ₹25 LPA" already includes those above ₹30 LPA and ₹50 LPA. I'm not sharing every detail of every college (I don't have it either) — engineering teaches you that not everything will be handed to you. Learning to find information yourself is a skill in itself.</p>
+      <p>This data is specific to M.Tech CSE at IIT Kanpur — don't use it to estimate other branches. Different departments have different recruiters and outcomes; some core branches see placement percentages under 50%. And remember, IIT Kanpur is a top-4 IIT — other institutes will naturally vary by branch and market conditions.</p>
+      <div class="note">If you're from a branch other than CS, don't blindly rely on this data. Reality differs across Mechanical, Electrical, Civil, Electronics, and other branches — and across institutes too. Always check the latest official numbers for your own branch and target institute.</div>
+      <p>The takeaway: don't look at one placement report and assume everyone gets a ₹40–50 LPA package at every IIT. Focus instead on understanding the opportunities available, the skill level required to reach them, and whether the program aligns with your long-term goals.</p>
+    </div>
+  </section>
+
+  <div class="divider reveal">· · ·</div>
+
+  <!-- ============ SECTION 4 ============ -->
+  <section id="s4">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Section 4</div>
+      <h2>Amit Bhaiya Wants to Tell You Something</h2>
+    </div>
+
+    <div class="reveal">
+      <p class="lead">After reading all this, many of you might be thinking — "I should start preparing for GATE or some other exam right now." I'd say: stop for a moment.</p>
+      <p>I always prefer data over motivation. For GATE CS, more than 2 lakh candidates register each year, but only a small fraction make it into the top IITs. Before choosing any path, do your own research — talk to students already at IITs, NITs, or working in the field you're aiming for. They have a far clearer picture than random voices on social media. There's no real GATE culture or encouragement at my college either — getting here was a different story altogether.</p>
+      <p>Since you're (possibly) from my college, here's a resource that may help you analyze things better:</p>
+      <p><a href="https://docs.google.com/spreadsheets/d/1DhohNBG1uQSc9gYAoCmuQ8dGw6bKaFFwIpmtJGZDHN8/edit?gid=2084501172#gid=2084501172" target="_blank" rel="noopener">→ Open the resource spreadsheet</a></p>
+
+      <h4 style="font-family:var(--mono); font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--lamp-dim); margin-top:40px;">GATE CS 2026 — a rough idea (out of 100 marks)</h4>
+      <table>
+        <thead><tr><th>Marks</th><th>Approx. AIR</th></tr></thead>
+        <tbody>
+          <tr><td>80+</td><td>under 40</td></tr>
+          <tr><td>70+</td><td>under 300</td></tr>
+          <tr><td>60+</td><td>under 1,000</td></tr>
+          <tr><td>53+</td><td>under 3,000</td></tr>
+          <tr><td>40+</td><td>around 10,000</td></tr>
+        </tbody>
+      </table>
+      <p>Your competition isn't with every person who fills the form — many appear casually, without serious prep. The real competition is with those preparing consistently for months or years. The path is difficult, not impossible. Whatever you choose — placements, GATE, CAT, government jobs, higher studies — make sure it's your decision, backed by research and a clear understanding of reality. Not assumption.</p>
+    </div>
+
+    <div class="sticky reveal" style="transform:rotate(0.6deg);">
+      <b>A last message for those who've already decided on GATE</b><br><br>
+      I was once exactly where you are — confused, weighing every option. I've watched friends and seniors take drops for GATE and still struggle. The possibility of failure always exists. But one thing that gave me confidence was data, not assumptions.<br><br>
+      If your goal is a top institute, don't just sit and study randomly — you need a plan, a strategy, and guidance from people who've already cracked it. You may not feel the weight of "guidance" now, but you will after your attempt. (And no — I'm not starting a mentorship program like other toppers.) If you're not ready to sit for long hours, consistently, for months — this path may not be for you. GATE isn't impossible, but wanting something bigger means being ready for bigger sacrifices.<br><br>
+      With the right plan, strategy, and guidance — reaching a top institute is absolutely possible. Stay focused, stay consistent, solve problems, give yourself time. A few months — or 1–2 years — of real work can completely change the direction of your life.
+    </div>
+  </section>
+
+  <div class="divider reveal">· · ·</div>
+
+  <!-- ============ SUMMARY ============ -->
+  <section id="summary">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Summary</div>
+      <h2>The Short Version</h2>
+    </div>
+    <div class="reveal">
+      <p class="lead">If you're from PCE or any other Tier-3 college, and think that four years of hard work guarantees a basic ₹4 LPA on-campus job — first understand your college's actual placement reality, and come out of that illusion. Life after final year can be challenging, and it will hit hard.</p>
+      <p>So start exploring alternatives from your 2nd or 3rd year itself — off-campus placements, competitive exams, or higher education. Pursuing higher education from a good institute is often a better long-term investment than settling for a 5–6 LPA job right after graduation — but it demands complete dedication and consistent effort.</p>
+      <p>The sooner you understand this and start working toward your goals — whatever path you choose — make sure you understand its requirements, pros, and cons, not just for the next few years, but for the next 10–20. A well-informed decision today can shape your career, your finances, and your life.</p>
+    </div>
+  </section>
+
+  <div class="divider reveal">· · ·</div>
+
+  <!-- ============ REASON ============ -->
+  <section id="why">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Why I Wrote This</div>
+      <h2>Just a Student, Like You</h2>
+    </div>
+    <div class="reveal">
+      <p>Amit is just a student like you, from a very humble background — government schools, no access to the best resources, guidance, or opportunities. But he always had the hunger to learn and the desire to do something meaningful. With limited knowledge, limited resources, and a fair share of limitations, he simply tried to make the best decisions possible with the information he had at the time.</p>
+      <p>Through the support of family, teachers, seniors, friends, and a lot of perseverance, he completed his engineering journey — and knows exactly what it feels like to be confused, lost, and unsure about the future. That's why he chose to share his experiences, mistakes, observations, and data with juniors — so they can make more informed decisions than he could.</p>
+      <p>Coming from this background and getting the chance to study at one of India's top institutes for higher education is something he considers a privilege, not an achievement. He's still figuring out a lot of things himself, and doesn't claim to have all the answers — but whenever someone genuinely needs help, he tries his best, because at different points in his own journey, someone else did the same for him.</p>
+      <blockquote>If this document helps even one student make a better decision about their future, the time spent creating it was worth it.</blockquote>
+    </div>
+
+    <div class="signoff reveal">
+      <p class="name">Amit Taksande</p>
+      B.Tech — PCE Nagpur (C.Tech, 2022–2026)<br>
+      M.Tech — IIT Kanpur (CSE, 2026–2028)<br><br>
+      <a href="https://www.linkedin.com/in/amittaksande" target="_blank" rel="noopener">LinkedIn ↗</a> &nbsp;·&nbsp;
+      <a href="mailto:engineer.amittaksande@gmail.com">engineer.amittaksande@gmail.com</a>
+
+      <div class="cta-row">
+        <a class="btn solid" href="https://forms.gle/BAmKfp96GZSjbsCF6" target="_blank" rel="noopener">Fill the feedback form (2 min)</a>
+        <a class="btn" href="https://shorturl.at/hmvl8" target="_blank" rel="noopener">Share this with your batch</a>
+      </div>
+      <p style="margin-top:22px; font-style:italic; color:var(--ink-dim); font-family:Georgia,serif;">"If this blog gave you some clarity, there's a 1% chance another student — just like you, confused and looking for guidance — needs it too. Share it in your college's unofficial groups. Remember, everything is interconnected. Whatever good we do for others eventually comes back to us."</p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  written at 2 a.m., somewhere between a hostel room and an IIT library · 0 to 1
+</footer>
+
+<script>
+  // progress bar
+  const progress = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progress.style.width = scrolled + '%';
+  });
+
+  // lamp glow follows cursor
+  const glow = document.getElementById('lamp-glow');
+  window.addEventListener('mousemove', (e) => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  });
+
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+      }
+    });
+  }, {threshold:0.12});
+  revealEls.forEach(el => io.observe(el));
+
+  // animated bar fills when visible
+  const bars = document.querySelectorAll('.bar-fill');
+  const barIo = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const el = entry.target;
+        el.style.width = el.dataset.pct + '%';
+        barIo.unobserve(el);
+      }
+    });
+  }, {threshold:0.4});
+  bars.forEach(b => barIo.observe(b));
+</script>
+
+</body>
+</html>
