@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Amit — The Long Way Round</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     TOKENS
+  ============================================================ */
+  :root{
+    --ink:        #0B0D10;
+    --paper:      #F7F3EC;
+    --paper-dim:  #ECE6D8;
+    --gold:       #C9A227;
+    --gold-soft:  rgba(201,162,39,0.35);
+    --brick:      #8B2F2F;
+    --brick-soft: rgba(139,47,47,0.35);
+    --forest:     #3D6B5C;
+    --forest-soft:rgba(61,107,92,0.35);
+    --blue:       #5A7BA6;
+    --blue-soft:  rgba(90,123,166,0.35);
+
+    --era: var(--gold); /* swapped per-section via JS for glow/markers */
+
+    --display: 'Fraunces', serif;
+    --body:    'Inter', sans-serif;
+    --mono:    'JetBrains Mono', monospace;
+
+    --maxw: 1080px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--body);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection{ background: var(--gold); color: var(--ink); }
+
+  a{ color: inherit; }
+
+  /* subtle grain so the near-black doesn't feel like flat plastic */
+  body::before{
+    content:"";
+    position: fixed; inset:0;
+    pointer-events:none;
+    z-index: 5;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  /* ============================================================
+     SKIP LINK / FOCUS
+  ============================================================ */
+  .skip-link{
+    position:absolute; left:-9999px; top:0;
+    background: var(--paper); color: var(--ink);
+    padding: 0.75rem 1.25rem; z-index: 999;
+    font-family: var(--mono); font-size: 0.85rem;
+  }
+  .skip-link:focus{ left: 1rem; top: 1rem; }
+
+  :focus-visible{
+    outline: 2px solid var(--gold);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  /* ============================================================
+     PROGRESS DOT — travels the page, shows current era color
+  ============================================================ */
+  #progress-rail{
+    position: fixed;
+    left: 50%;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: rgba(247,243,236,0.06);
+    transform: translateX(-50%);
+    z-index: 4;
+    pointer-events:none;
+  }
+  #progress-fill{
+    width: 100%;
+    height: 0%;
+    background: linear-gradient(to bottom, var(--era), transparent);
+    transition: height 0.05s linear, background 0.6s ease;
+    box-shadow: 0 0 14px 1px var(--era);
+  }
+
+  /* ============================================================
+     HERO
+  ============================================================ */
+  .hero{
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 1.5rem 4rem;
+    position: relative;
+  }
+
+  .hero-eyebrow{
+    font-family: var(--mono);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    color: var(--gold);
+    opacity: 0;
+    transform: translateY(10px);
+    animation: rise 0.9s ease forwards 0.2s;
+  }
+
+  .hero-name{
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(3rem, 10vw, 7.5rem);
+    line-height: 0.96;
+    margin: 0.6rem 0 1rem;
+    letter-spacing: -0.01em;
+  }
+  .hero-name .ink-reveal{
+    display:inline-block;
+    overflow:hidden;
+  }
+  .hero-name .ink-reveal span{
+    display:inline-block;
+    transform: translateY(105%);
+    animation: rise 0.95s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .hero-name .ink-reveal:nth-child(1) span{ animation-delay: 0.35s; }
+  .hero-name .ink-reveal:nth-child(2) span{ animation-delay: 0.48s; }
+
+  .hero-line{
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.05rem, 2.4vw, 1.45rem);
+    color: var(--paper-dim);
+    max-width: 38ch;
+    line-height: 1.5;
+    opacity: 0;
+    animation: rise 0.9s ease forwards 0.85s;
+  }
+
+  .hero-scroll-cue{
+    position:absolute;
+    bottom: 2.4rem;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247,243,236,0.5);
+    opacity: 0;
+    animation: rise 0.9s ease forwards 1.3s;
+  }
+  .hero-scroll-cue .stem{
+    width: 1px; height: 38px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-scroll-cue .stem::after{
+    content:"";
+    position:absolute; left:0; top:-100%;
+    width:100%; height:100%;
+    background: linear-gradient(to bottom, transparent, var(--paper));
+    animation: drip 1.8s ease-in-out infinite;
+  }
+  @keyframes drip{
+    0%{ top:-100%; }
+    100%{ top:100%; }
+  }
+
+  @keyframes rise{
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  /* ============================================================
+     THE THREAD — central SVG spine, draws on scroll
+  ============================================================ */
+  .thread-wrap{
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+  #thread-svg{
+    position: absolute;
+    top:0; left:50%;
+    transform: translateX(-50%);
+    height: 100%;
+    overflow: visible;
+  }
+  #thread-path{
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 6px var(--gold-soft));
+    transition: stroke 0.8s ease, filter 0.8s ease, stroke-width 0.8s ease;
+  }
+
+  /* ============================================================
+     STORY CONTAINER
+  ============================================================ */
+  main{
+    position: relative;
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 1.5rem 10rem;
+    z-index: 2;
+  }
+
+  .chapter{
+    position: relative;
+    width: 100%;
+    padding: 6vw 0;
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    align-items: start;
+  }
+  .chapter.align-left  .chapter-card{ grid-column: 1; text-align: right; }
+  .chapter.align-right .chapter-card{ grid-column: 3; text-align: left; }
+  .chapter .chapter-node{ grid-column: 2; display:flex; justify-content:center; padding-top: 0.55rem; }
+
+  .chapter-card{
+    max-width: 460px;
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.9s cubic-bezier(.2,.7,.2,1), transform 0.9s cubic-bezier(.2,.7,.2,1);
+  }
+  .chapter.align-right .chapter-card{ transform: translateY(36px); }
+  .chapter.in-view .chapter-card{ opacity: 1; transform: translateY(0); }
+
+  .chapter-index{
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
+    color: var(--era);
+    display: block;
+    margin-bottom: 0.55rem;
+    transition: color 0.8s ease;
+  }
+  .chapter.align-left .chapter-index{ direction: rtl; }
+
+  .chapter-years{
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: rgba(247,243,236,0.45);
+    display:block;
+    margin-bottom: 0.9rem;
+  }
+
+  .chapter-title{
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(1.55rem, 3.2vw, 2.15rem);
+    line-height: 1.12;
+    margin: 0 0 1rem;
+  }
+
+  .chapter-body{
+    font-size: 1.01rem;
+    line-height: 1.78;
+    color: rgba(247,243,236,0.82);
+    font-weight: 300;
+  }
+  .chapter-body strong{ color: var(--paper); font-weight: 500; }
+
+  /* the dot on the thread for each chapter */
+  .node-dot{
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: 2.5px solid var(--era);
+    box-shadow: 0 0 0 4px rgba(11,13,16,1), 0 0 0 6px rgba(247,243,236,0.05);
+    transition: border-color 0.8s ease, transform 0.4s ease, box-shadow 0.4s ease;
+    position: relative;
+  }
+  .chapter.in-view .node-dot{
+    transform: scale(1.18);
+    box-shadow: 0 0 0 4px rgba(11,13,16,1), 0 0 22px 4px var(--era);
+  }
+  .node-dot::after{
+    content:"";
+    position:absolute; inset:-9px;
+    border-radius:50%;
+    border: 1px solid var(--era);
+    opacity:0;
+    transition: opacity 0.5s ease, transform 0.6s ease;
+    transform: scale(0.6);
+  }
+  .chapter.in-view .node-dot::after{
+    opacity: 0.45;
+    transform: scale(1);
+    animation: pulse-ring 2.6s ease-out infinite;
+  }
+  @keyframes pulse-ring{
+    0%{ transform: scale(1); opacity:0.45; }
+    100%{ transform: scale(1.9); opacity:0; }
+  }
+
+  /* divider between chapters: thin, breathing rule */
+  .chapter-divider{
+    grid-column: 1 / -1;
+    display:flex; align-items:center; justify-content:center;
+    margin-top: 4.5vw;
+  }
+  .chapter-divider span{
+    width: 46px; height:1px;
+    background: rgba(247,243,236,0.14);
+  }
+
+  /* ============================================================
+     TURNING POINT — special treatment: frayed, jagged, breathing
+  ============================================================ */
+  .turning-point{
+    position: relative;
+    padding: 9vw 0 10vw;
+    text-align: center;
+    grid-template-columns: 1fr;
+  }
+  .turning-point .tp-inner{
+    max-width: 620px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(40px) scale(0.985);
+    transition: opacity 1.1s cubic-bezier(.2,.7,.2,1), transform 1.1s cubic-bezier(.2,.7,.2,1);
+  }
+  .turning-point.in-view .tp-inner{ opacity:1; transform: translateY(0) scale(1); }
+
+  .tp-glow{
+    position:absolute;
+    left:50%; top:50%;
+    width: 480px; height:480px;
+    transform: translate(-50%,-50%);
+    background: radial-gradient(circle, var(--brick-soft), transparent 70%);
+    filter: blur(40px);
+    opacity:0;
+    transition: opacity 1.4s ease;
+    pointer-events:none;
+    z-index:-1;
+  }
+  .turning-point.in-view .tp-glow{ opacity: 0.55; animation: ache 5s ease-in-out infinite; }
+  @keyframes ache{
+    0%,100%{ opacity:0.4; }
+    50%{ opacity:0.7; }
+  }
+
+  .tp-eyebrow{
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--brick);
+    display:inline-block;
+    margin-bottom: 1.1rem;
+    position: relative;
+  }
+  .tp-eyebrow::before, .tp-eyebrow::after{
+    content:"";
+    display:inline-block;
+    width: 22px; height:1px;
+    background: var(--brick);
+    vertical-align: middle;
+    margin: 0 0.6em;
+    opacity:0.6;
+  }
+
+  .tp-title{
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.9rem, 4.6vw, 3rem);
+    line-height: 1.16;
+    margin: 0 0 1.3rem;
+    color: var(--paper);
+  }
+
+  .tp-body{
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: rgba(247,243,236,0.78);
+    font-weight: 300;
+  }
+
+  .tp-mark{
+    margin-top: 2.2rem;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: rgba(139,47,47,0.85);
+    letter-spacing: 0.06em;
+  }
+
+  /* ============================================================
+     FOOTER / PRESENT DAY
+  ============================================================ */
+  .present-banner{
+    margin-top: 3vw;
+    text-align:center;
+    padding: 4vw 1.5rem 2vw;
+  }
+  .present-banner .tag{
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blue);
+  }
+  .present-line{
+    width: 1px;
+    height: 60px;
+    margin: 1.2rem auto;
+    background: linear-gradient(to bottom, var(--blue), transparent);
+    position: relative;
+  }
+  .present-line .tip{
+    position:absolute;
+    left:50%; bottom:-3px;
+    width:7px; height:7px;
+    transform: translateX(-50%);
+    border-radius:50%;
+    background: var(--blue);
+    box-shadow: 0 0 12px 3px var(--blue-soft);
+    animation: breathe 2.4s ease-in-out infinite;
+  }
+  @keyframes breathe{
+    0%,100%{ transform: translateX(-50%) scale(1); opacity:1; }
+    50%{ transform: translateX(-50%) scale(1.6); opacity:0.55; }
+  }
+
+  footer{
+    text-align:center;
+    padding: 2.5rem 1.5rem 4rem;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: rgba(247,243,236,0.32);
+  }
+
+  /* ============================================================
+     RESPONSIVE
+  ============================================================ */
+  @media (max-width: 760px){
+    .thread-wrap{ left: 26px; }
+    #thread-svg{ left:26px; }
+    .chapter{
+      grid-template-columns: 40px 1fr;
+      padding: 11vw 0 11vw;
+    }
+    .chapter .chapter-node{ grid-column:1; padding-top:0.4rem; }
+    .chapter.align-left .chapter-card,
+    .chapter.align-right .chapter-card{
+      grid-column: 2;
+      text-align: left;
+      max-width: 100%;
+    }
+    .chapter.align-left .chapter-index{ direction: ltr; }
+    .chapter-divider{ margin-top: 8vw; }
+    .hero{ padding: 5rem 1.25rem 3rem; }
+    .turning-point{ padding: 14vw 0 15vw; }
+  }
+
+  /* ============================================================
+     REDUCED MOTION
+  ============================================================ */
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *, *::before, *::after{
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .chapter-card, .tp-inner{ opacity:1 !important; transform:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to story</a>
+
+<div id="progress-rail"><div id="progress-fill"></div></div>
+
+<header class="hero">
+  <p class="hero-eyebrow">An education, in full</p>
+  <h1 class="hero-name">
+    <span class="ink-reveal"><span>Amit's</span></span><br>
+    <span class="ink-reveal"><span>Long Way Round</span></span>
+  </h1>
+  <p class="hero-line">From a government-school classroom in Ballarpur to a research desk at IIT Kanpur — the parts that built him, including the part he doesn't usually tell.</p>
+  <div class="hero-scroll-cue">
+    <span>Follow the thread</span>
+    <span class="stem"></span>
+  </div>
+</header>
+
+<main id="main-content">
+
+  <div class="thread-wrap">
+    <svg id="thread-svg" width="3" preserveAspectRatio="none">
+      <path id="thread-path" d="M1.5,0 L1.5,10000" />
+    </svg>
+  </div>
+
+  <!-- Chapter 1 -->
+  <section class="chapter align-left" data-era="gold">
+    <article class="chapter-card">
+      <span class="chapter-index">01 — Where it starts</span>
+      <span class="chapter-years">Class 1–4</span>
+      <h2 class="chapter-title">Early Schooling</h2>
+      <p class="chapter-body">Amit began his educational journey at a local private school in Ballarpur, where he completed Classes 1 and 2. Due to financial constraints — and to give both children in the family equal educational opportunities — his parents later enrolled him in a government school. That decision became an important part of his journey: it taught him, early, <strong>the value of money and how much it shapes the quality of an education.</strong></p>
+    </article>
+    <div class="chapter-node"><div class="node-dot"></div></div>
+  </section>
+  <div class="chapter-divider"><span></span></div>
+
+  <!-- Chapter 2 -->
+  <section class="chapter align-right" data-era="gold">
+    <div class="chapter-node"><div class="node-dot"></div></div>
+    <article class="chapter-card">
+      <span class="chapter-index">02 — The years that shaped him</span>
+      <span class="chapter-years">Class 5–10</span>
+      <h2 class="chapter-title">Primary &amp; Secondary Schooling</h2>
+      <p class="chapter-body">Amit completed Class 5 through Class 10 at Nagar Parishad Gandhi Vidyalaya, Ballarpur. These years played a significant role in shaping his personality and values. He was fortunate to receive constant support, guidance, and encouragement from teachers <strong>who cared for him like family.</strong> He remains deeply grateful to every one of them — for the part they played in his growth, academic and personal.</p>
+    </article>
+  </section>
+  <div class="chapter-divider"><span></span></div>
+
+  <!-- Chapter 3 -->
+  <section class="chapter align-left" data-era="gold-fade">
+    <article class="chapter-card">
+      <span class="chapter-index">03 — A dream, and a deadline</span>
+      <span class="chapter-years">2020 – 2022</span>
+      <h2 class="chapter-title">Higher Secondary Education</h2>
+      <p class="chapter-body">Amit completed Classes 11 and 12 at Nehru Vidyalaya &amp; Junior Science College. Across these two years he dedicated himself to preparing for the NEET examination, with the dream of one day pursuing an MBBS degree. He worked sincerely — but was unable to secure a government MBBS seat. <strong>Around four to five months before the examination, unexpected circumstances affected both his preparation and his life</strong> — something he chooses to keep private.</p>
+    </article>
+    <div class="chapter-node"><div class="node-dot"></div></div>
+  </section>
+
+  <!-- THE TURNING POINT -->
+  <section class="chapter turning-point" data-era="brick">
+    <div class="tp-glow" aria-hidden="true"></div>
+    <div class="tp-inner">
+      <span class="tp-eyebrow">The Turning Point</span>
+      <h2 class="tp-title">The lowest, longest year.</h2>
+      <p class="tp-body">This phase became one of the most challenging periods of Amit's life. He experienced severe depression, uncontrollable thoughts, and constant mental migraines. It took nearly a year to recover and regain emotional stability. <strong>Despite being one of the lowest points in his life, this experience transformed him</strong> — into someone stronger, more resilient, and far more grateful for what came after.</p>
+      <p class="tp-mark">— recovery took its time, and that was allowed to be true —</p>
+    </div>
+  </section>
+
+  <div class="chapter-divider"><span></span></div>
+
+  <!-- Chapter 5 -->
+  <section class="chapter align-right" data-era="forest">
+    <div class="chapter-node"><div class="node-dot"></div></div>
+    <article class="chapter-card">
+      <span class="chapter-index">04 — Rebuilding, in public</span>
+      <span class="chapter-years">2022 – 2026</span>
+      <h2 class="chapter-title">Undergraduate Studies</h2>
+      <p class="chapter-body">Amit completed his B.Tech in Computer Technology from Priyadarshini College of Engineering, Nagpur. These four years were a period of exploration and self-discovery. He made plenty of mistakes, learned from each one, and chased every opportunity he could reach with the knowledge and experience he had. <strong>They taught him the value of a good education, a good environment, and a constant learning attitude</strong> — lessons that have stayed with him since.</p>
+    </article>
+  </section>
+  <div class="chapter-divider"><span></span></div>
+
+  <!-- Chapter 6 -->
+  <section class="chapter align-left" data-era="blue">
+    <article class="chapter-card">
+      <span class="chapter-index">05 — Where the thread is now</span>
+      <span class="chapter-years">2026 — Present</span>
+      <h2 class="chapter-title">Postgraduate, at IIT Kanpur</h2>
+      <p class="chapter-body">Amit is currently pursuing his M.Tech in Computer Science and Engineering at IIT Kanpur. He doesn't think of this as an achievement so much as <strong>a privilege and a responsibility.</strong> He sees it as a door opened onto continuous learning, research, and personal growth — one that motivates him to learn something new every day.</p>
+    </article>
+    <div class="chapter-node"><div class="node-dot"></div></div>
+  </section>
+
+  <div class="present-banner">
+    <span class="tag">This chapter is still being written</span>
+    <div class="present-line"><span class="tip"></span></div>
+  </div>
+
+</main>
+
+<footer>
+  Ballarpur → Nagpur → Kanpur — every line above is part of the same thread.
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* -----------------------------------------------------------
+     ERA COLOR MAP — drives --era custom property + thread color
+  ----------------------------------------------------------- */
+  var ERA_COLORS = {
+    'gold':      { color: '#C9A227', soft: 'rgba(201,162,39,0.35)', width: 2.5 },
+    'gold-fade': { color: '#C9A227', soft: 'rgba(201,162,39,0.30)', width: 1.8 },
+    'brick':     { color: '#8B2F2F', soft: 'rgba(139,47,47,0.45)',  width: 1.1 },
+    'forest':    { color: '#3D6B5C', soft: 'rgba(61,107,92,0.35)',  width: 2.0 },
+    'blue':      { color: '#5A7BA6', soft: 'rgba(90,123,166,0.4)',  width: 2.8 }
+  };
+
+  var root = document.documentElement;
+  var threadPath = document.getElementById('thread-path');
+  var threadSvg  = document.getElementById('thread-svg');
+  var progressFill = document.getElementById('progress-fill');
+  var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapter'));
+
+  function setEra(key){
+    var e = ERA_COLORS[key] || ERA_COLORS['gold'];
+    root.style.setProperty('--era', e.color);
+    if(threadPath){
+      threadPath.style.stroke = e.color;
+      threadPath.style.strokeWidth = e.width;
+      threadPath.style.filter = 'drop-shadow(0 0 6px ' + e.soft + ')';
+    }
+    if(progressFill){
+      progressFill.style.background = 'linear-gradient(to bottom, ' + e.color + ', transparent)';
+      progressFill.style.boxShadow = '0 0 14px 1px ' + e.color;
+    }
+  }
+
+  /* -----------------------------------------------------------
+     Build a slightly irregular path for the thread.
+     Each chapter gets a "jitter" amplitude based on its era —
+     calm for gold/forest/blue, jagged & frayed for brick.
+  ----------------------------------------------------------- */
+  function buildThreadPath(){
+    var wrap = document.querySelector('.thread-wrap');
+    var totalH = wrap.offsetHeight;
+    threadSvg.setAttribute('height', totalH);
+    threadSvg.setAttribute('viewBox', '0 0 3 ' + totalH);
+
+    var segments = chapters.length;
+    var pts = ['M1.5,0'];
+    var prevY = 0;
+
+    chapters.forEach(function(ch, i){
+      var rect = ch.getBoundingClientRect();
+      var wrapRect = wrap.getBoundingClientRect();
+      var centerY = (rect.top - wrapRect.top) + rect.height / 2;
+      var era = ch.getAttribute('data-era') || 'gold';
+
+      var amp = (era === 'brick') ? 14 : (era === 'gold-fade') ? 4 : 1.5;
+      var dir = (i % 2 === 0) ? 1 : -1;
+
+      if(era === 'brick'){
+        // jagged frayed segment: several zig-zags
+        var steps = 5;
+        var segLen = (centerY - prevY) / steps;
+        for(var s=1; s<=steps; s++){
+          var jx = 1.5 + dir * amp * (s % 2 === 0 ? 1 : -0.6) * Math.random();
+          dir *= -1;
+          pts.push('L' + jx.toFixed(2) + ',' + (prevY + segLen * s).toFixed(1));
+        }
+      } else {
+        var midY = (prevY + centerY) / 2;
+        var cx = 1.5 + dir * amp;
+        pts.push('Q' + cx.toFixed(2) + ',' + midY.toFixed(1) + ' 1.5,' + centerY.toFixed(1));
+      }
+      prevY = centerY;
+    });
+
+    pts.push('L1.5,' + totalH);
+    threadPath.setAttribute('d', pts.join(' '));
+
+    var length = threadPath.getTotalLength();
+    threadPath.style.strokeDasharray = length;
+    threadPath.style.strokeDashoffset = reduceMotion ? 0 : length;
+  }
+
+  /* -----------------------------------------------------------
+     Scroll handler: draw thread, update progress dot + era color
+  ----------------------------------------------------------- */
+  var ticking = false;
+  function onScroll(){
+    if(!ticking){
+      window.requestAnimationFrame(updateOnScroll);
+      ticking = true;
+    }
+  }
+
+  function updateOnScroll(){
+    ticking = false;
+    var scrollY = window.scrollY || window.pageYOffset;
+    var docH = document.documentElement.scrollHeight - window.innerHeight;
+    var pct = docH > 0 ? Math.min(scrollY / docH, 1) : 0;
+
+    if(progressFill){ progressFill.style.height = (pct * 100) + '%'; }
+
+    // draw thread proportionally to scroll position relative to main content
+    var main = document.getElementById('main-content');
+    var mainRect = main.getBoundingClientRect();
+    var mainTop = mainRect.top + scrollY;
+    var mainH = main.offsetHeight;
+    var localPct = Math.min(Math.max((scrollY + window.innerHeight*0.6 - mainTop) / mainH, 0), 1);
+
+    if(!reduceMotion && threadPath){
+      var length = parseFloat(threadPath.style.strokeDasharray);
+      threadPath.style.strokeDashoffset = length * (1 - localPct);
+    }
+
+    // figure out current era based on chapter nearest viewport center
+    var viewportCenter = scrollY + window.innerHeight * 0.45;
+    var currentEra = 'gold';
+    chapters.forEach(function(ch){
+      var top = ch.getBoundingClientRect().top + scrollY;
+      if(top <= viewportCenter){
+        currentEra = ch.getAttribute('data-era') || currentEra;
+      }
+    });
+    setEra(currentEra);
+  }
+
+  /* -----------------------------------------------------------
+     IntersectionObserver: reveal chapter cards as they enter
+  ----------------------------------------------------------- */
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, { threshold: 0.28, rootMargin: '0px 0px -8% 0px' });
+
+    chapters.forEach(function(ch){ io.observe(ch); });
+  } else {
+    chapters.forEach(function(ch){ ch.classList.add('in-view'); });
+  }
+
+  /* -----------------------------------------------------------
+     Init
+  ----------------------------------------------------------- */
+  function init(){
+    buildThreadPath();
+    updateOnScroll();
+    setEra('gold');
+  }
+
+  window.addEventListener('load', init);
+  window.addEventListener('resize', function(){
+    buildThreadPath();
+    updateOnScroll();
+  });
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // in case images/webfonts shift layout after initial load
+  setTimeout(function(){ buildThreadPath(); updateOnScroll(); }, 600);
+})();
+</script>
+
+</body>
+</html>
