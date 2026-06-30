@@ -235,7 +235,68 @@ font-style:italic;
 color:#444;
 margin-top:20px;
 }
+.hero-title{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    line-height:1.2;
+    margin-bottom:25px;
+}
 
+.hero-title .name{
+    font-size:64px;
+    font-weight:800;
+    letter-spacing:2px;
+    background:linear-gradient(90deg,#2563eb,#9333ea,#06b6d4);
+    background-size:300%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:gradientText 6s linear infinite;
+}
+
+.hero-title .designation{
+    font-size:24px;
+    font-weight:600;
+    color:#374151;
+    letter-spacing:1px;
+    text-transform:uppercase;
+}
+
+.hero-title .iit{
+    font-size:18px;
+    font-weight:500;
+    color:#6b7280;
+    letter-spacing:3px;
+    text-transform:uppercase;
+}
+
+@keyframes gradientText{
+    0%{
+        background-position:0%;
+    }
+    100%{
+        background-position:300%;
+    }
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.hero-title .name{
+    font-size:42px;
+}
+
+.hero-title .designation{
+    font-size:18px;
+}
+
+.hero-title .iit{
+    font-size:15px;
+    letter-spacing:2px;
+}
+
+}
 /* MOTIVATION */
 
 .motivation{
@@ -374,10 +435,9 @@ align-items:center;
 <li><a href="index.html">Home</a></li>
 <li><a href="about.html">About</a></li>
 <li><a href="#">Projects</a></li>
-<li><a href="#">Skills</a></li>
+<li><a href="#">Achievement</a></li>
 <li><a href="#">Contact</a></li>
 <li><a href="blog.html">Blog</a></li>
-<li><a href="#">My Mentor</a></li>
 </ul>
 
 </nav>
@@ -392,11 +452,11 @@ align-items:center;
 IITian 
 </div>
 
-<h1>
-AMIT TAKSANDE 
-    M.Tech in CSE IIT Kanpur
+<h1 class="hero-title">
+    <span class="name">AMIT TAKSANDE</span>
+    <span class="designation">M.Tech in Computer Science & Engineering</span>
+    <span class="iit">Indian Institute of Technology Kanpur</span>
 </h1>
-
 <p>
 
 I'm Amit Pradip Taksande, an M.Tech student in Computer Science at IIT Kanpur with a strong passion for technology, algorithms, and lifelong learning. I enjoy solving problems, whether technical challenges or questions about life, and continuously expanding my knowledge in computer science, artificial intelligence, machine learning, and software development.
