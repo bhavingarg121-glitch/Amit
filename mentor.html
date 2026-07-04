@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Mentor — A Tribute</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --night: #11162b;
+    --night-deep: #090c1a;
+    --night-mid: #1a2140;
+    --panel-line: rgba(242,184,75,0.16);
+    --panel-line-strong: rgba(242,184,75,0.32);
+    --gold: #f2b84b;
+    --gold-soft: rgba(242,184,75,0.28);
+    --gold-dim: rgba(242,184,75,0.55);
+    --ink: #eef0f6;
+    --ink-dim: rgba(238,240,246,0.66);
+    --ink-dimmer: rgba(238,240,246,0.4);
+    --display: 'Fraunces', serif;
+    --body: 'Inter', sans-serif;
+    --hand: 'Caveat', cursive;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background: radial-gradient(ellipse at 50% -10%, #1c2447 0%, var(--night) 40%, var(--night-deep) 100%);
+    color: var(--ink);
+    font-family: var(--body);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  ::selection{ background: var(--gold); color: var(--night-deep); }
+  :focus-visible{ outline: 2px solid var(--gold); outline-offset: 3px; }
+
+  /* ---------- starfield ---------- */
+  #stars{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .star{
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: twinkle 4s ease-in-out infinite;
+  }
+  .guide-star{
+    position: fixed;
+    top: 8%;
+    left: 50%;
+    width: 260px;
+    height: 260px;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, var(--gold-soft) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+    animation: pulseGlow 6s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%, 100%{ opacity:0.15; }
+    50%{ opacity:0.85; }
+  }
+  @keyframes pulseGlow{
+    0%, 100%{ opacity:0.5; transform: translateX(-50%) scale(1); }
+    50%{ opacity:0.85; transform: translateX(-50%) scale(1.15); }
+  }
+
+  .wrap{
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px 140px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding-top: 100px;
+    text-align: center;
+  }
+  .eyebrow{
+    font-family: var(--body);
+    font-size: 12px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 22px;
+  }
+  h1.title{
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(2.6rem, 8vw, 4.4rem);
+    margin: 0 0 18px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .subtitle{
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: var(--ink-dim);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .hero-rule{
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(var(--gold-dim), transparent);
+    margin: 50px auto 0;
+  }
+
+  /* ---------- reveal ---------- */
+  .reveal{
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(14px);
+    transition: opacity 1s ease, filter 1s ease, transform 1s ease;
+  }
+  .reveal.lit{
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+
+  /* ---------- prose ---------- */
+  .prose{
+    margin-top: 64px;
+    font-size: 1.13rem;
+    color: var(--ink-dim);
+  }
+  .prose p{ margin: 0 0 24px; }
+  .prose strong{ color: var(--ink); font-weight: 600; }
+
+  .pull{
+    font-family: var(--display);
+    font-style: italic;
+    font-size: clamp(1.4rem, 3vw, 1.85rem);
+    color: var(--gold);
+    text-align: center;
+    line-height: 1.5;
+    margin: 70px auto;
+    max-width: 560px;
+    font-weight: 500;
+  }
+
+  /* ---------- teacher vs mentor ---------- */
+  .split{
+    margin: 80px 0;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 0;
+    align-items: stretch;
+  }
+  .split-col{
+    padding: 30px 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+  }
+  .split-col svg{ width: 36px; height: 36px; opacity: 0.8; }
+  .split-col .label{
+    font-family: var(--body);
+    font-size: 10.5px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-dimmer);
+  }
+  .split-col .line{
+    font-family: var(--display);
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .split-col.mentor .line{ color: var(--gold); }
+  .split-divider{
+    background: linear-gradient(var(--panel-line-strong), var(--gold-dim), var(--panel-line-strong));
+  }
+  @media (max-width: 620px){
+    .split{ grid-template-columns: 1fr; gap: 20px; }
+    .split-divider{ width: 40px; height: 1px; margin: 0 auto; background: linear-gradient(90deg, transparent, var(--gold-dim), transparent); }
+  }
+
+  /* ---------- panel ---------- */
+  .panel{
+    border: 1px solid var(--panel-line);
+    border-radius: 2px;
+    padding: 34px 30px;
+    margin: 50px 0;
+    background: linear-gradient(180deg, rgba(242,184,75,0.03), transparent);
+  }
+  .panel-note{
+    font-family: var(--hand);
+    font-size: 1.35rem;
+    color: var(--gold);
+    text-align: right;
+    margin-top: 14px;
+  }
+
+  /* ---------- constellation of qualities ---------- */
+  .constellation-section{
+    margin: 100px 0 90px;
+    text-align: center;
+  }
+  .constellation-section .heading{
+    font-family: var(--display);
+    font-size: 1.6rem;
+    font-style: italic;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .constellation-section .sub{
+    color: var(--ink-dimmer);
+    font-size: 0.95rem;
+    margin-bottom: 40px;
+  }
+  .constellation{
+    max-width: 620px;
+    margin: 0 auto;
+  }
+  .constellation svg{ width: 100%; height: auto; overflow: visible; }
+  .const-line{
+    stroke: var(--gold-dim);
+    stroke-width: 1;
+    fill: none;
+    stroke-dasharray: 8 6;
+    stroke-dashoffset: 400;
+    transition: stroke-dashoffset 1.8s ease;
+  }
+  .constellation.lit .const-line{ stroke-dashoffset: 0; }
+  .const-dot{
+    fill: var(--ink-dimmer);
+    transition: fill 0.6s ease, r 0.6s ease;
+  }
+  .constellation.lit .const-dot{
+    fill: var(--gold);
+  }
+  .const-label{
+    font-family: var(--body);
+    font-size: 11.5px;
+    fill: var(--ink-dimmer);
+    letter-spacing: 0.04em;
+    transition: fill 0.6s ease;
+  }
+  .constellation.lit .const-label{ fill: var(--ink-dim); }
+
+  /* ---------- location note ---------- */
+  .location{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    margin: 60px 0;
+    font-family: var(--body);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+  .location svg{ width: 16px; height: 16px; }
+
+  /* ---------- gratitude closing ---------- */
+  .closing{
+    margin-top: 80px;
+  }
+  .closing p{ margin: 0 0 24px; color: var(--ink-dim); font-size: 1.13rem; }
+  .closing .emphasis{
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 1.35rem;
+    color: var(--ink);
+    text-align: center;
+    margin: 50px 0;
+  }
+
+  /* ---------- final quote plaque ---------- */
+  .plaque-wrap{
+    margin: 90px 0 50px;
+    display: flex;
+    justify-content: center;
+  }
+  .plaque{
+    border: 1px solid var(--panel-line-strong);
+    padding: 40px 36px;
+    max-width: 600px;
+    position: relative;
+    text-align: center;
+  }
+  .plaque::before, .plaque::after{
+    content: '';
+    position: absolute;
+    width: 24px; height: 24px;
+    border: 1px solid var(--gold);
+    opacity: 0.7;
+  }
+  .plaque::before{ top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .plaque::after{ bottom: -1px; right: -1px; border-left: none; border-top: none; }
+  .plaque p{
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--ink);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  footer{
+    text-align: center;
+    font-family: var(--hand);
+    font-size: 1.4rem;
+    color: var(--gold-dim);
+    margin-top: 60px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    .star, .guide-star{ animation: none; }
+    .reveal{ transition: none; opacity: 1; filter: none; transform: none; }
+    .const-line{ transition: none; stroke-dashoffset: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="stars" aria-hidden="true"></div>
+<div class="guide-star" aria-hidden="true"></div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">A Tribute</div>
+    <h1 class="title">My Mentor</h1>
+    <p class="subtitle">Behind every meaningful achievement lies a story rarely visible to the world.</p>
+    <div class="hero-rule"></div>
+  </div>
+
+  <div class="prose reveal">
+    <p>Behind every meaningful achievement lies a story that is rarely visible to the world — a story of guidance, encouragement, difficult conversations, silent support, and someone who believed in your potential long before you recognized it yourself. For me, that person is my mentor.</p>
+  </div>
+
+  <div class="split reveal">
+    <div class="split-col">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4h11a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H4z"/><path d="M4 4v13.5A2.5 2.5 0 0 0 6.5 20H18"/></svg>
+      <div class="label">A Teacher</div>
+      <div class="line">imparts knowledge.</div>
+    </div>
+    <div class="split-divider"></div>
+    <div class="split-col mentor">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M12 8.5l1.3 2.8 3 .4-2.2 2.1.5 3-2.6-1.5-2.6 1.5.5-3-2.2-2.1 3-.4z"/></svg>
+      <div class="label">A Mentor</div>
+      <div class="line">transforms perspective.</div>
+    </div>
+  </div>
+
+  <div class="prose reveal">
+    <p>Throughout my academic journey, I have been fortunate to receive guidance from someone who never measured success merely by grades, ranks, or achievements. Instead, I was encouraged to ask better questions, think critically, embrace challenges, and continuously improve myself — not just as a student, but as a human being.</p>
+  </div>
+
+  <p class="pull reveal">"I was taught how to think — not what to think."</p>
+
+  <div class="prose reveal">
+    <p>One of the greatest gifts my mentor gave me was not answers, but the ability to discover answers for myself. That lesson has become one of the strongest foundations of my education.</p>
+    <p>There were moments of uncertainty, self-doubt, and difficult decisions when the path ahead seemed unclear. During those times, my mentor's wisdom, patience, and unwavering confidence reminded me that <strong>setbacks are temporary, but learning is permanent.</strong> Every challenge became an opportunity to grow, every mistake became a lesson, and every success became a reminder to remain humble.</p>
+  </div>
+
+  <div class="panel reveal">
+    <p style="margin:0; color:var(--ink-dim); font-size:1.05rem;">What I admire most is not simply the knowledge my mentor possesses, but the values that accompany it — qualities that cannot be measured by examinations or certificates, yet they define true greatness.</p>
+    <div class="panel-note">— the part no scorecard can capture</div>
+  </div>
+
+  <div class="constellation-section reveal" id="constSection">
+    <div class="heading">The values behind the knowledge</div>
+    <div class="sub">Five points of light that guided the way</div>
+    <div class="constellation" id="constellation">
+      <svg viewBox="0 0 600 220">
+        <path class="const-line" d="M60,150 L170,60 L300,120 L430,50 L540,140" />
+        <circle class="const-dot" cx="60" cy="150" r="4"></circle>
+        <circle class="const-dot" cx="170" cy="60" r="4"></circle>
+        <circle class="const-dot" cx="300" cy="120" r="4"></circle>
+        <circle class="const-dot" cx="430" cy="50" r="4"></circle>
+        <circle class="const-dot" cx="540" cy="140" r="4"></circle>
+        <text class="const-label" x="60" y="180" text-anchor="middle">Discipline</text>
+        <text class="const-label" x="170" y="40" text-anchor="middle">Integrity</text>
+        <text class="const-label" x="300" y="145" text-anchor="middle">Curiosity</text>
+        <text class="const-label" x="430" y="30" text-anchor="middle">Humility</text>
+        <text class="const-label" x="540" y="170" text-anchor="middle">Lifelong Learning</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="location reveal">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+    IIT Kanpur
+  </div>
+
+  <div class="prose reveal">
+    <p>As I continue my journey here, I carry these lessons with me every day. Every project I undertake, every problem I solve, every new concept I learn, and every challenge I face is influenced by the mindset my mentor helped cultivate. The impact of a true mentor extends far beyond classrooms and textbooks — it quietly shapes the decisions, character, and aspirations of the people they guide.</p>
+    <p>I believe education is not only about acquiring knowledge but about becoming a person capable of using that knowledge responsibly and meaningfully. My mentor has played an invaluable role in helping me understand this distinction.</p>
+  </div>
+
+  <div class="closing reveal">
+    <p>Whatever milestones I achieve in the future, they will never be mine alone. Behind each accomplishment will always be the invisible contribution of those who invested their time, wisdom, and belief in me.</p>
+    <p class="emphasis">My mentor's guidance will forever remain one of the most significant influences in my life — and for that, I will always be deeply grateful.</p>
+  </div>
+
+  <div class="plaque-wrap reveal">
+    <div class="plaque">
+      <p>"The greatest mentors do not create followers. They create independent thinkers, lifelong learners, and individuals who one day become mentors themselves. If, in the future, I am able to inspire even one student the way my mentor inspired me, I will consider that one of the greatest achievements of my life."</p>
+    </div>
+  </div>
+
+  <footer>with gratitude</footer>
+
+</div>
+
+<script>
+  // generate starfield
+  const starsContainer = document.getElementById('stars');
+  const STAR_COUNT = 90;
+  for(let i=0;i<STAR_COUNT;i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.top = Math.random()*100 + '%';
+    s.style.left = Math.random()*100 + '%';
+    const size = Math.random()*1.6 + 0.6;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.animationDelay = (Math.random()*4) + 's';
+    s.style.animationDuration = (3 + Math.random()*3) + 's';
+    starsContainer.appendChild(s);
+  }
+
+  // reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('lit');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    revealEls.forEach(el=>io.observe(el));
+  } else {
+    revealEls.forEach(el=>el.classList.add('lit'));
+  }
+
+  // constellation lights up separately (adds .lit to inner element)
+  const constEl = document.getElementById('constellation');
+  if('IntersectionObserver' in window){
+    const io2 = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          constEl.classList.add('lit');
+          io2.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    io2.observe(document.getElementById('constSection'));
+  } else {
+    constEl.classList.add('lit');
+  }
+</script>
+
+</body>
+</html>
