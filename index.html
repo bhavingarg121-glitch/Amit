@@ -78,159 +78,54 @@ nav ul li a:hover{
 color:#2563eb;
 }
 
-/*==========================
-        HERO SECTION
-===========================*/
+/* ================= HERO ================= */
 
 .hero{
 
     min-height:100vh;
-    padding:120px 8%;
-    display:grid;
-    grid-template-columns:1.1fr .9fr;
-    align-items:center;
-    gap:70px;
-
-}
-
-/* LEFT */
-
-.hero-content{
-
-    max-width:700px;
-
-}
-
-.hero-title{
-
     display:flex;
-    flex-direction:column;
-    line-height:1.1;
-    margin:25px 0;
+    align-items:center;
+    justify-content:center;
+    gap:80px;
 
-    color:#111827;
-
-    font-size:68px;
-    font-weight:800;
+    padding:120px 9% 80px;
 
 }
 
-.hero-title span{
-
-    margin-top:12px;
-
-    font-size:18px;
-
-    color:#6b7280;
-
-    font-weight:500;
-
-    letter-spacing:2px;
-
-    text-transform:uppercase;
-
-}
-
-.hero p{
-
-    margin:30px 0;
-
-    color:#555;
-
-    font-size:18px;
-
-    line-height:1.9;
-
-}
-
-/*==========================
-        RIGHT IMAGE
-===========================*/
+/* IMAGE */
 
 .hero-image{
 
-    display:flex;
-    justify-content:flex-end;
-    align-items:center;
+    flex:0 0 380px;
 
 }
-
-/* Modern Card */
 
 .image-box{
 
-    width:420px;
-    height:520px;
+    width:360px;
+    height:360px;
 
-    border-radius:35px;
+    border-radius:28px;
 
     overflow:hidden;
 
-    position:relative;
-
     background:#fff;
 
-    border:1px solid rgba(0,0,0,.08);
-
     box-shadow:
+    0 20px 45px rgba(0,0,0,.10);
 
-    0 40px 80px rgba(0,0,0,.10),
-
-    0 15px 40px rgba(37,99,235,.10);
-
-    transition:.5s;
-
-}
-
-/* Blue Glow */
-
-.image-box::before{
-
-    content:'';
-
-    position:absolute;
-
-    width:350px;
-    height:350px;
-
-    background:radial-gradient(circle,#2563eb55,transparent 70%);
-
-    top:-120px;
-    right:-120px;
-
-}
-
-/* Purple Glow */
-
-.image-box::after{
-
-    content:'';
-
-    position:absolute;
-
-    width:280px;
-    height:280px;
-
-    background:radial-gradient(circle,#9333ea40,transparent 70%);
-
-    bottom:-100px;
-    left:-100px;
+    transition:.4s;
 
 }
 
 .image-box:hover{
 
-    transform:translateY(-15px);
+    transform:translateY(-10px);
 
     box-shadow:
-
-    0 60px 120px rgba(37,99,235,.18),
-
-    0 25px 60px rgba(0,0,0,.12);
+    0 35px 60px rgba(37,99,235,.18);
 
 }
-
-/* IMAGE */
 
 .image-box img{
 
@@ -241,7 +136,7 @@ color:#2563eb;
 
     object-position:center top;
 
-    transition:.6s;
+    transition:.5s;
 
 }
 
@@ -251,33 +146,55 @@ color:#2563eb;
 
 }
 
-/* Floating */
+/* CONTENT */
 
-.image-box{
+.hero-content{
 
-    animation:float 5s ease-in-out infinite;
-
-}
-
-@keyframes float{
-
-0%{
-
-transform:translateY(0);
+    max-width:700px;
 
 }
 
-50%{
+.hero-title{
 
-transform:translateY(-15px);
+    color:#111827;
+
+    font-size:70px;
+
+    font-weight:800;
+
+    line-height:1.05;
+
+    margin-bottom:30px;
 
 }
 
-100%{
+.hero-title small{
 
-transform:translateY(0);
+    display:block;
+
+    margin-top:12px;
+
+    font-size:18px;
+
+    font-weight:500;
+
+    color:#6b7280;
+
+    line-height:1.6;
+
+    letter-spacing:1px;
 
 }
+
+.hero-content p{
+
+    font-size:18px;
+
+    color:#555;
+
+    line-height:1.9;
+
+    margin-bottom:35px;
 
 }
 
@@ -287,37 +204,30 @@ transform:translateY(0);
 
 .hero{
 
-grid-template-columns:1fr;
+    flex-direction:column;
 
-text-align:center;
+    text-align:center;
 
-}
-
-.hero-image{
-
-justify-content:center;
-
-margin-top:60px;
-
-}
-
-.hero-title{
-
-font-size:50px;
-
-}
-
-.hero-title span{
-
-font-size:16px;
+    gap:45px;
 
 }
 
 .image-box{
 
-width:340px;
+    width:300px;
+    height:300px;
 
-height:440px;
+}
+
+.hero-title{
+
+    font-size:48px;
+
+}
+
+.hero-title small{
+
+    font-size:15px;
 
 }
 
@@ -325,22 +235,32 @@ height:440px;
 
 @media(max-width:600px){
 
-.hero-title{
+.hero{
 
-font-size:38px;
+    padding-top:110px;
 
 }
 
 .image-box{
 
-width:290px;
+    width:250px;
+    height:250px;
 
-height:380px;
+}
+
+.hero-title{
+
+    font-size:36px;
+
+}
+
+.hero-title small{
+
+    font-size:13px;
 
 }
 
 }
-
 /* TIMELINE */
 
 .timeline{
@@ -552,31 +472,36 @@ align-items:center;
 
 <section class="hero">
 
-<img src="amit.png" alt="Amit">
+    <div class="hero-image">
+        <div class="image-box">
+            <img src="amit.png" alt="Amit Taksande">
+        </div>
+    </div>
 
-<div>
+    <div class="hero-content">
 
-<div class="tag">
-IITian 
-</div>
+        <h1 class="hero-title">
+            AMIT TAKSANDE
 
-<h1 class="hero-title">
-    AMIT TAKSANDE
-    <span>M.Tech in Computer Science & Engineering, IIT Kanpur</span>
-</h1>
+            <small>
+                M.Tech in Computer Science & Engineering<br>
+                Indian Institute of Technology Kanpur
+            </small>
 
-<p>
+        </h1>
 
-I'm Amit Taksande, an M.Tech student in Computer Science at IIT Kanpur with a strong passion for technology, algorithms, and lifelong learning. I enjoy solving problems, whether technical challenges or questions about life, and continuously expanding my knowledge in computer science, artificial intelligence, machine learning, and software development.
+        <p>
+            I'm Amit Pradip Taksande, an M.Tech student in Computer Science &
+            Engineering at IIT Kanpur with a strong passion for Artificial
+            Intelligence, Software Engineering, Algorithms, and lifelong
+            learning.
+        </p>
 
-</p>
+        <a href="#" class="btn">Explore Journey</a>
 
-<a href="about.html" class="btn">Explore Journey</a>
-
-</div>
+    </div>
 
 </section>
-
 <section>
 
 <h2 class="title">Overview</h2>
