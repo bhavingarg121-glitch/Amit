@@ -4,473 +4,713 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title> AMIT TAKSANDE | IIT Kanpur </title>
+<title>AMIT TAKSANDE | IIT Kanpur</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
-scroll-behavior:smooth;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+  scroll-behavior:smooth;
+}
+
+:root{
+  --blue:#2563eb;
+  --purple:#9333ea;
+  --ink:#111827;
+  --ink-soft:#555;
+  --muted:#6b7280;
+  --line:rgba(17,24,39,.08);
+  --shadow-sm:0 8px 20px rgba(17,24,39,.06);
+  --shadow-md:0 20px 45px rgba(17,24,39,.10);
+  --shadow-lg:0 30px 60px rgba(37,99,235,.18);
+  --ease:cubic-bezier(.16,.8,.3,1);
 }
 
 body{
-background:#ffffff;
-color:#222;
+  background:#ffffff;
+  color:#222;
+  overflow-x:hidden;
 }
 
 section{
-padding:90px 9%;
+  padding:90px 9%;
 }
 
 h1,h2,h3{
-font-weight:700;
+  font-weight:700;
 }
 
 p{
-line-height:1.8;
-color:#666;
+  line-height:1.8;
+  color:#666;
 }
 
-/* NAVBAR */
+::selection{ background:var(--blue); color:#fff; }
+
+/* ================= LOADER ================= */
+
+#loader{
+  position:fixed;
+  inset:0;
+  background:#ffffff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+  transition:opacity .5s ease, visibility .5s ease;
+}
+
+#loader.loaded{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.spinner{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  border:6px solid #e5e7eb;
+  border-top:6px solid var(--blue);
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  100%{ transform:rotate(360deg); }
+}
+
+/* ================= CURSOR GLOW ================= */
+
+#cursorGlow{
+  position:fixed;
+  top:0; left:0;
+  width:280px;
+  height:280px;
+  background:radial-gradient(circle,rgba(37,99,235,.14),transparent 70%);
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  z-index:0;
+  filter:blur(10px);
+  transition:opacity .3s ease;
+  opacity:0;
+}
+
+/* ================= SCROLL REVEAL ================= */
+
+.hidden{
+  opacity:0;
+  transform:translateY(50px);
+  transition:opacity .8s var(--ease), transform .8s var(--ease);
+}
+
+.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  .hidden{ opacity:1; transform:none; }
+}
+
+/* ================= NAVBAR ================= */
 
 nav{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-background:rgba(255,255,255,.9);
-backdrop-filter:blur(18px);
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:18px 9%;
-box-shadow:0 5px 25px rgba(0,0,0,.06);
-z-index:1000;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 9%;
+  box-shadow:0 5px 25px rgba(0,0,0,.06);
+  z-index:1000;
 }
 
 .logo{
-font-size:28px;
-font-weight:800;
-background:linear-gradient(45deg,#2563eb,#9333ea);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+  font-size:28px;
+  font-weight:800;
+  background:linear-gradient(45deg,var(--blue),var(--purple));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
 nav ul{
-display:flex;
-gap:28px;
-list-style:none;
+  display:flex;
+  gap:28px;
+  list-style:none;
 }
 
 nav ul li a{
-text-decoration:none;
-color:#333;
-font-weight:500;
-transition:.3s;
+  position:relative;
+  text-decoration:none;
+  color:#333;
+  font-weight:500;
+  padding-bottom:4px;
+  transition:.3s;
+}
+
+nav ul li a::after{
+  content:'';
+  position:absolute;
+  left:0; bottom:0;
+  width:0%;
+  height:2px;
+  background:linear-gradient(45deg,var(--blue),var(--purple));
+  transition:width .3s var(--ease);
 }
 
 nav ul li a:hover{
-color:#2563eb;
+  color:var(--blue);
+}
+
+nav ul li a:hover::after{
+  width:100%;
+}
+
+nav ul li a.active{
+  color:var(--blue);
+  font-weight:700;
+}
+
+nav ul li a.active::after{
+  width:100%;
 }
 
 /* ================= HERO ================= */
 
 .hero{
-
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:80px;
-
-    padding:120px 9% 80px;
-
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:90px;
+  padding:140px 9% 80px;
+  position:relative;
 }
 
 /* IMAGE */
 
 .hero-image{
+  flex:0 0 460px;
+  position:relative;
+}
 
-    flex:0 0 380px;
-
+.hero-image::before{
+  content:'';
+  position:absolute;
+  top:-30px; left:-30px;
+  width:100%;
+  height:100%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  border-radius:32px;
+  opacity:.14;
+  z-index:0;
 }
 
 .image-box{
-
-    width:360px;
-    height:360px;
-
-    border-radius:28px;
-
-    overflow:hidden;
-
-    background:#fff;
-
-    box-shadow:
-    0 20px 45px rgba(0,0,0,.10);
-
-    transition:.4s;
-
+  width:440px;
+  height:440px;
+  border-radius:28px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:var(--shadow-md);
+  transition:.4s var(--ease);
+  position:relative;
+  z-index:1;
 }
 
 .image-box:hover{
-
-    transform:translateY(-10px);
-
-    box-shadow:
-    0 35px 60px rgba(37,99,235,.18);
-
+  transform:translateY(-10px);
+  box-shadow:var(--shadow-lg);
 }
 
 .image-box img{
-
-    width:100%;
-    height:100%;
-
-    object-fit:cover;
-
-    object-position:center top;
-
-    transition:.5s;
-
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center top;
+  transition:.5s var(--ease);
+  animation:floatImage 6s ease-in-out infinite;
 }
 
 .image-box:hover img{
-
-    transform:scale(1.05);
-
+  transform:scale(1.05);
 }
 
 /* CONTENT */
 
 .hero-content{
-
-    max-width:700px;
-
+  max-width:700px;
 }
 
 .hero-title{
-
-    color:#111827;
-
-    font-size:70px;
-
-    font-weight:800;
-
-    line-height:1.05;
-
-    margin-bottom:30px;
-
+  color:var(--ink);
+  font-size:74px;
+  font-weight:800;
+  line-height:1.04;
+  letter-spacing:-1px;
+  margin-bottom:22px;
 }
 
-.hero-title small{
+.hero-subtitle{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:28px;
+}
 
-    display:block;
+.hero-subtitle span{
+  font-size:19px;
+  font-weight:500;
+  color:var(--muted);
+  letter-spacing:.4px;
+}
 
-    margin-top:12px;
+.hero-subtitle span.degree{
+  color:var(--blue);
+  font-weight:600;
+}
 
-    font-size:18px;
+.hero-subtitle span.institute{
+  color:var(--ink);
+  font-weight:600;
+}
 
-    font-weight:500;
-
-    color:#6b7280;
-
-    line-height:1.6;
-
-    letter-spacing:1px;
-
+.hero-subtitle span.institute small{
+  display:block;
+  color:var(--muted);
+  font-weight:400;
+  font-size:14.5px;
+  margin-top:2px;
+  letter-spacing:.2px;
 }
 
 .hero-content p{
+  font-size:18px;
+  color:#555;
+  line-height:1.9;
+  margin-bottom:35px;
+}
 
-    font-size:18px;
+/* BUTTON */
 
-    color:#555;
+.btn{
+  position:relative;
+  overflow:hidden;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:15px 32px;
+  border-radius:999px;
+  background:linear-gradient(45deg,var(--blue),var(--purple));
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  font-size:15.5px;
+  box-shadow:0 14px 30px -12px rgba(37,99,235,.55);
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+}
 
-    line-height:1.9;
+.btn:hover{
+  transform:translateY(-4px);
+  box-shadow:0 20px 40px -14px rgba(37,99,235,.65);
+}
 
-    margin-bottom:35px;
+.ripple{
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,.55);
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  animation:ripple .6s linear;
+}
 
+@keyframes ripple{
+  from{ width:0; height:0; opacity:.8; }
+  to{ width:400px; height:400px; opacity:0; }
+}
+
+@keyframes floatImage{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-14px); }
 }
 
 /* Responsive */
 
 @media(max-width:1000px){
-
-.hero{
-
+  .hero{
     flex-direction:column;
-
     text-align:center;
-
-    gap:45px;
-
-}
-
-.image-box{
-
+    gap:50px;
+  }
+  .hero-image{ flex:none; }
+  .hero-image::before{ display:none; }
+  .image-box{
     width:300px;
     height:300px;
-
-}
-
-.hero-title{
-
-    font-size:48px;
-
-}
-
-.hero-title small{
-
-    font-size:15px;
-
-}
-
+  }
+  .hero-title{ font-size:48px; }
+  .hero-subtitle{ align-items:center; }
+  .hero-subtitle span.institute small{ text-align:center; }
 }
 
 @media(max-width:600px){
-
-.hero{
-
-    padding-top:110px;
-
+  .hero{ padding-top:120px; }
+  .image-box{
+    width:230px;
+    height:230px;
+    border-radius:22px;
+  }
+  .hero-title{ font-size:36px; }
+  .hero-subtitle span{ font-size:16px; }
 }
 
-.image-box{
+/* ================= SECTION TITLES ================= */
 
-    width:250px;
-    height:250px;
-
+.title{
+  text-align:center;
+  font-size:38px;
+  color:var(--ink);
+  margin-bottom:50px;
+  position:relative;
 }
 
-.hero-title{
-
-    font-size:36px;
-
+.title::after{
+  content:'';
+  display:block;
+  width:60px;
+  height:4px;
+  margin:14px auto 0;
+  border-radius:10px;
+  background:linear-gradient(45deg,var(--blue),var(--purple));
 }
 
-.hero-title small{
+/* ================= OVERVIEW CARDS ================= */
 
-    font-size:13px;
-
+.cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:28px;
 }
 
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:34px 28px;
+  box-shadow:var(--shadow-sm);
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s ease;
+  position:relative;
+  overflow:hidden;
 }
+
+.card::before{
+  content:'';
+  position:absolute;
+  top:0; left:0;
+  width:100%;
+  height:4px;
+  background:linear-gradient(45deg,var(--blue),var(--purple));
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .4s var(--ease);
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  box-shadow:var(--shadow-md);
+  border-color:transparent;
+}
+
+.card:hover::before{
+  transform:scaleX(1);
+}
+
+.card h3{
+  font-size:19px;
+  color:var(--ink);
+  margin-bottom:12px;
+}
+
+.card p{
+  font-size:14.5px;
+  line-height:1.75;
+}
+
+@media(max-width:1000px){
+  .cards{ grid-template-columns:repeat(2,1fr); }
+}
+@media(max-width:600px){
+  .cards{ grid-template-columns:1fr; }
+}
+
 /* TIMELINE */
 
 .timeline{
-position:relative;
-margin-top:50px;
+  position:relative;
+  margin-top:50px;
 }
 
 .timeline::before{
-content:'';
-position:absolute;
-left:50%;
-width:5px;
-height:100%;
-background:linear-gradient(#2563eb,#9333ea);
-transform:translateX(-50%);
-border-radius:10px;
+  content:'';
+  position:absolute;
+  left:50%;
+  width:5px;
+  height:100%;
+  background:linear-gradient(var(--blue),var(--purple));
+  transform:translateX(-50%);
+  border-radius:10px;
 }
 
 .box{
-width:45%;
-padding:30px;
-background:white;
-border-radius:20px;
-box-shadow:0 10px 30px rgba(0,0,0,.06);
-margin-bottom:60px;
-position:relative;
+  width:45%;
+  padding:30px;
+  background:white;
+  border-radius:20px;
+  box-shadow:var(--shadow-sm);
+  margin-bottom:60px;
+  position:relative;
+  transition:.4s var(--ease);
 }
 
-.left{
-margin-right:auto;
+.box:hover{
+  transform:translateY(-10px) scale(1.03);
+  box-shadow:0 20px 45px rgba(37,99,235,.15);
 }
 
-.right{
-margin-left:auto;
-}
+.left{ margin-right:auto; }
+.right{ margin-left:auto; }
 
 .box h3{
-color:#2563eb;
-margin-bottom:10px;
+  color:var(--blue);
+  margin-bottom:10px;
+}
+
+@media(max-width:800px){
+  .timeline::before{ left:8px; }
+  .box{ width:100%; padding-left:40px; }
+  .left, .right{ margin:0 0 60px; }
 }
 
 /* MENTOR */
 
 .mentor{
-display:grid;
-grid-template-columns:300px 1fr;
-gap:60px;
-align-items:center;
+  display:grid;
+  grid-template-columns:300px 1fr;
+  gap:60px;
+  align-items:center;
 }
 
 .mentor img{
-width:100%;
-border-radius:25px;
-box-shadow:0 15px 35px rgba(0,0,0,.08);
+  width:100%;
+  border-radius:25px;
+  box-shadow:var(--shadow-md);
+  animation:floatImage 6s ease-in-out infinite;
 }
 
 .quote{
-font-size:22px;
-font-style:italic;
-color:#444;
-margin-top:20px;
+  font-size:22px;
+  font-style:italic;
+  color:#444;
+  margin-top:20px;
+  border-left:3px solid var(--blue);
+  padding-left:18px;
+}
+
+@media(max-width:800px){
+  .mentor{ grid-template-columns:1fr; text-align:center; }
+  .quote{ border-left:none; border-top:3px solid var(--blue); padding-left:0; padding-top:16px; }
 }
 
 /* MOTIVATION */
 
 .motivation{
-text-align:center;
-padding:100px 10%;
-background:linear-gradient(45deg,#eef5ff,#faf5ff);
+  text-align:center;
+  padding:100px 10%;
+  background:linear-gradient(45deg,#eef5ff,#faf5ff);
 }
 
 .motivation h2{
-font-size:40px;
-margin-bottom:25px;
+  font-size:40px;
+  margin-bottom:25px;
 }
 
 .motivation p{
-font-size:22px;
-font-weight:600;
-color:#2563eb;
+  font-size:22px;
+  font-weight:600;
+  color:var(--blue);
+}
+
+.motivation p.body-text{
+  font-size:16px;
+  font-weight:400;
+  color:var(--ink-soft);
+  max-width:820px;
+  margin:0 auto;
+  line-height:1.9;
 }
 
 /* ================= FOOTER ================= */
 
 footer{
-    background:#0f172a;
-    color:#fff;
-    padding:70px 9% 25px;
-    margin-top:80px;
+  background:#0f172a;
+  color:#fff;
+  padding:70px 9% 25px;
+  margin-top:80px;
 }
 
 .footer-container{
-    display:grid;
-    grid-template-columns:2fr 1fr 1fr 1fr;
-    gap:60px;
-    align-items:flex-start;
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:60px;
+  align-items:flex-start;
 }
 
 .footer-box h3{
-    font-size:22px;
-    margin-bottom:22px;
-    color:#ffffff;
-    position:relative;
+  font-size:22px;
+  margin-bottom:22px;
+  color:#ffffff;
+  position:relative;
 }
 
 .footer-box h3::after{
-    content:'';
-    width:45px;
-    height:3px;
-    background:#2563eb;
-    display:block;
-    margin-top:8px;
-    border-radius:10px;
+  content:'';
+  width:45px;
+  height:3px;
+  background:var(--blue);
+  display:block;
+  margin-top:8px;
+  border-radius:10px;
 }
 
 .footer-box p{
-    color:#cbd5e1;
-    font-size:15px;
-    line-height:1.9;
+  color:#cbd5e1;
+  font-size:15px;
+  line-height:1.9;
 }
 
 .footer-box a{
-    display:block;
-    text-decoration:none;
-    color:#cbd5e1;
-    margin-bottom:12px;
-    transition:.3s;
-    font-size:15px;
+  display:block;
+  text-decoration:none;
+  color:#cbd5e1;
+  margin-bottom:12px;
+  transition:.3s;
+  font-size:15px;
 }
 
 .footer-box a:hover{
-    color:#60a5fa;
-    padding-left:8px;
+  color:#60a5fa;
+  padding-left:8px;
 }
 
 .social{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-    margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:10px;
 }
 
 hr{
-    border:none;
-    height:1px;
-    background:#334155;
-    margin:45px 0 25px;
+  border:none;
+  height:1px;
+  background:#334155;
+  margin:45px 0 25px;
 }
 
 .copyright{
-    text-align:center;
-    color:#94a3b8;
-    font-size:14px;
+  text-align:center;
+  color:#94a3b8;
+  font-size:14px;
 }
-
-/* Responsive */
 
 @media(max-width:1000px){
-
-.footer-container{
-grid-template-columns:repeat(2,1fr);
-gap:40px;
-}
-
+  .footer-container{
+    grid-template-columns:repeat(2,1fr);
+    gap:40px;
+  }
 }
 
 @media(max-width:650px){
-
-.footer-container{
-grid-template-columns:1fr;
-text-align:center;
+  .footer-container{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+  .footer-box h3::after{ margin:auto; margin-top:8px; }
+  .footer-box a:hover{ padding-left:0; }
+  .social{ align-items:center; }
 }
 
-.footer-box h3::after{
-margin:auto;
-margin-top:8px;
+/* ================= BACK TO TOP ================= */
+
+#topBtn{
+  position:fixed;
+  right:30px;
+  bottom:30px;
+  width:54px;
+  height:54px;
+  border:none;
+  border-radius:50%;
+  background:linear-gradient(45deg,var(--blue),var(--purple));
+  color:white;
+  font-size:20px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  box-shadow:0 10px 25px rgba(37,99,235,.35);
+  transition:.3s var(--ease);
+  z-index:999;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(10px);
 }
 
-.footer-box a:hover{
-padding-left:0;
+#topBtn.visible{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
 }
 
-.social{
-align-items:center;
+#topBtn:hover{
+  transform:translateY(-5px);
 }
 
-}
 </style>
 
 </head>
 
 <body>
 
+<div id="loader"><div class="spinner"></div></div>
+<div id="cursorGlow"></div>
+
 <nav>
 
 <div class="logo">Amit Taksande</div>
 
 <ul>
-<li><a href="index.html">Home</a></li>
-<li><a href="about.html">About</a></li>
-<li><a href="project.html">Projects</a></li>
-<li><a href="keys.html">Learning</a></li>
-<li><a href="contact.html">Contact</a></li>
-<li><a href="blog.html">Blog</a></li>
-<li><a href="mentor.html">My Mentor</a></li>
+<li><a href="index.html" class="nav-link">Home</a></li>
+<li><a href="about.html" class="nav-link">About</a></li>
+<li><a href="project.html" class="nav-link">Projects</a></li>
+<li><a href="keys.html" class="nav-link">Learning</a></li>
+<li><a href="contact.html" class="nav-link">Contact</a></li>
+<li><a href="blog.html" class="nav-link">Blog</a></li>
+<li><a href="mentor.html" class="nav-link">My Mentor</a></li>
 </ul>
 
 </nav>
 
-<section class="hero">
+<section class="hero" id="home">
 
     <div class="hero-image">
         <div class="image-box">
@@ -480,57 +720,58 @@ align-items:center;
 
     <div class="hero-content">
 
-        <h1 class="hero-title">
-            AMIT TAKSANDE
+        <h1 class="hero-title">AMIT TAKSANDE</h1>
 
-            <small>
-                M.Tech in Computer Science & Engineering<br>
-                Indian Institute of Technology Kanpur
-            </small>
-
-        </h1>
+        <div class="hero-subtitle">
+            <span class="degree">M.Tech in Computer Science &amp; Engineering</span>
+            <span class="institute">
+                IIT Kanpur
+                <small>Indian Institute of Technology, Kanpur</small>
+            </span>
+        </div>
 
         <p>
-            I'm Amit Pradip Taksande, an M.Tech student in Computer Science &
+            I'm Amit Pradip Taksande, an M.Tech student in Computer Science &amp;
             Engineering at IIT Kanpur with a strong passion for Artificial
             Intelligence, Software Engineering, Algorithms, and lifelong
             learning.
         </p>
 
-        <a href="#" class="btn">Explore Journey</a>
+        <a href="about.html" class="btn">Explore Journey</a>
 
     </div>
 
 </section>
+
 <section>
 
 <h2 class="title">Overview</h2>
 
 <div class="cards">
 
-<div class="card">
+<div class="card hidden">
 <h3>About</h3>
 <p>
 Know more about my academic journey, interests, and passion for technology.
 </p>
 </div>
 
-<div class="card">
+<div class="card hidden">
 <h3>Featured Project</h3>
 <p>
 A platform that digitizes dairy operations with automated milk collection, billing, inventory control, and analytics to improve productivity and operational efficiency.
 </p>
 </div>
 
-<div class="card">
-<h3> Top Skills</h3>
+<div class="card hidden">
+<h3>Top Skills</h3>
 <p>
 Leetcode, Java, C++
 </p>
 </div>
 
-<div class="card">
-<h3> Key Achievement</h3>
+<div class="card hidden">
+<h3>Key Achievement</h3>
 <p>
 Successfully qualified GATE and began an academic journey towards IIT Kanpur.
 </p>
@@ -542,34 +783,28 @@ Successfully qualified GATE and began an academic journey towards IIT Kanpur.
 
 <section>
 
-<h2 class="title"> My GATE Journey</h2>
+<h2 class="title">My GATE Journey</h2>
 
 <div class="timeline">
 
-<div class="box left">
+<div class="box left hidden">
 
 <h3>PCE Nagpur</h3>
 
 <p>
-
-Bachelor of Technology (2022–2026)
-
+Bachelor of Technology (2022–2026)<br><br>
 Built strong foundations in Computer Technology while actively developing real-world software projects and enhancing technical expertise.
-
 </p>
 
 </div>
 
-<div class="box right">
+<div class="box right hidden">
 
 <h3>IIT Kanpur</h3>
 
 <p>
-
-Master of Technology (2026–2028)
-
+Master of Technology (2026–2028)<br><br>
 GATE became the turning point of my academic career, opening opportunities to pursue higher education at one of India's premier institutes.
-
 </p>
 
 </div>
@@ -580,22 +815,18 @@ GATE became the turning point of my academic career, opening opportunities to pu
 
 <section class="mentor">
 
-<img src="images/mentor.jpg" alt="Mentor">
+<img src="images/mentor.jpg" alt="Mentor" class="hidden">
 
-<div>
+<div class="hidden">
 
-<h2> My Mentor</h2>
+<h2>My Mentor</h2>
 
 <p>
-
 Behind every successful journey is a mentor who believes in your potential even before you do.
-
 </p>
 
 <div class="quote">
-
-"My mentor’s guidance inspired me to aim higher and achieve success through GATE."
-
+"My mentor's guidance inspired me to aim higher and achieve success through GATE."
 </div>
 
 </div>
@@ -604,13 +835,15 @@ Behind every successful journey is a mentor who believes in your potential even 
 
 <section class="motivation">
 
-<h2> Philosophy of Life </h2>
+<h2 class="hidden">Philosophy of Life</h2>
 
-<p>
+<p class="hidden">
+He doesn't claim to have all the answers.
+</p>
 
-He doesn't claim to have all the answers. He is still exploring questions such as: What is the purpose of life? Does life have an inherent meaning, or do we create our own? He believes that with time, experience, and wisdom, greater clarity will come.
-His life and perspective are deeply inspired by thinkers and leaders such as J. Krishnamurti, Osho, Kabir, Steve Jobs, Elon Musk, Faraday, Nikola Tesla, Jyotiba & Savitribai Phule, Bhagat Singh, B.R.Ambedkar, Nelson Mandela and A.P.J.Abdul Kalam.
-
+<p class="body-text hidden">
+He is still exploring questions such as: What is the purpose of life? Does life have an inherent meaning, or do we create our own? He believes that with time, experience, and wisdom, greater clarity will come.
+His life and perspective are deeply inspired by thinkers and leaders such as J. Krishnamurti, Osho, Kabir, Steve Jobs, Elon Musk, Faraday, Nikola Tesla, Jyotiba &amp; Savitribai Phule, Bhagat Singh, B.R. Ambedkar, Nelson Mandela and A.P.J. Abdul Kalam.
 </p>
 
 </section>
@@ -620,7 +853,7 @@ His life and perspective are deeply inspired by thinkers and leaders such as J. 
 <div class="footer-container">
 
     <div class="footer-box">
-        <h3> Amit Taksande </h3>
+        <h3>Amit Taksande</h3>
         <p>
             Passionate Computer Technology student dedicated to innovation,
             software development, and achieving excellence through GATE.
@@ -630,21 +863,21 @@ His life and perspective are deeply inspired by thinkers and leaders such as J. 
     <div class="footer-box">
         <h3>Quick Links</h3>
 
-        <a href="index.html"> Home</a>
-        <a href="about.html"> About</a>
-        <a href="project.html"> Projects</a>
-        <a href="blog.html"> Blog</a>
-        <a href="keys.html"> Learning </a>
-        <a href="mentor.html"> My Mentor</a>
-        <a href="contact.html"> Contact</a>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="project.html">Projects</a>
+        <a href="blog.html">Blog</a>
+        <a href="keys.html">Learning</a>
+        <a href="mentor.html">My Mentor</a>
+        <a href="contact.html">Contact</a>
 
     </div>
 
     <div class="footer-box">
         <h3>Contact</h3>
 
-        <p> engineer.amittaksande@gmail.com</p>
-        <p> Nagpur, Maharashtra</p>
+        <p>engineer.amittaksande@gmail.com</p>
+        <p>Nagpur, Maharashtra</p>
 
     </div>
 
@@ -654,11 +887,10 @@ His life and perspective are deeply inspired by thinkers and leaders such as J. 
 
         <div class="social">
 
-            <a href="www.linkedin.com/in/amittaksande">LinkedIn</a>
-                        <a href="engineer.amittaksande@gmail.com">Email</a>
-            <a href="https://shorturl.at/hmvl8">GitHub</a>
+            <a href="https://www.linkedin.com/in/amittaksande" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="mailto:engineer.amittaksande@gmail.com">Email</a>
+            <a href="https://shorturl.at/hmvl8" target="_blank" rel="noopener noreferrer">GitHub</a>
             <a href="#">Instagram</a>
-
 
         </div>
 
@@ -674,158 +906,84 @@ His life and perspective are deeply inspired by thinkers and leaders such as J. 
 
 </footer>
 
+<button id="topBtn" aria-label="Scroll to top">↑</button>
+
+<script>
+
+  /* ---- Loader: hide once page has finished loading ---- */
+  window.addEventListener('load', () => {
+    const loader = document.getElementById('loader');
+    setTimeout(() => loader.classList.add('loaded'), 250);
+  });
+
+  /* ---- Scroll reveal for anything with .hidden ---- */
+  const revealTargets = document.querySelectorAll('.hidden');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((items) => {
+      items.forEach((item) => {
+        if (item.isIntersecting) {
+          item.target.classList.add('show');
+          io.unobserve(item.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    revealTargets.forEach((el) => io.observe(el));
+  } else {
+    revealTargets.forEach((el) => el.classList.add('show'));
+  }
+
+  /* ---- Active navbar link on scroll ---- */
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  function setActiveLink() {
+    let current = sections.length ? sections[0].id : '';
+    sections.forEach((sec) => {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top <= 120) current = sec.id;
+    });
+    navLinks.forEach((link) => {
+      const isHome = link.getAttribute('href') === 'index.html';
+      link.classList.toggle('active', isHome && current === 'home');
+    });
+  }
+  window.addEventListener('scroll', setActiveLink);
+  setActiveLink();
+
+  /* ---- Back to top button ---- */
+  const topBtn = document.getElementById('topBtn');
+  window.addEventListener('scroll', () => {
+    topBtn.classList.toggle('visible', window.scrollY > 400);
+  });
+  topBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ---- Ripple effect on .btn ---- */
+  document.querySelectorAll('.btn').forEach((btn) => {
+    btn.addEventListener('click', function (e) {
+      const rect = this.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      ripple.style.left = (e.clientX - rect.left) + 'px';
+      ripple.style.top = (e.clientY - rect.top) + 'px';
+      this.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    });
+  });
+
+  /* ---- Cursor glow (desktop pointers only) ---- */
+  if (window.matchMedia('(pointer: fine)').matches) {
+    const glow = document.getElementById('cursorGlow');
+    let shown = false;
+    window.addEventListener('mousemove', (e) => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+      if (!shown) { glow.style.opacity = '1'; shown = true; }
+    });
+  }
+
+</script>
+
 </body>
-    <script>
-    /* Reveal Animation */
-
-.hidden{
-opacity:0;
-transform:translateY(70px);
-transition:1s ease;
-}
-
-.show{
-opacity:1;
-transform:translateY(0);
-}
-
-/* Active Navbar */
-
-nav ul li a.active{
-color:#2563eb;
-font-weight:700;
-}
-
-/* Loader */
-
-#loader{
-position:fixed;
-inset:0;
-background:white;
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:99999;
-transition:.5s;
-}
-
-.spinner{
-width:65px;
-height:65px;
-border-radius:50%;
-border:6px solid #e5e7eb;
-border-top:6px solid #2563eb;
-animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-
-100%{
-transform:rotate(360deg);
-}
-
-}
-
-/* Scroll Button */
-
-#topBtn{
-position:fixed;
-right:30px;
-bottom:30px;
-width:55px;
-height:55px;
-border:none;
-border-radius:50%;
-background:#2563eb;
-color:white;
-font-size:22px;
-display:none;
-justify-content:center;
-align-items:center;
-cursor:pointer;
-box-shadow:0 10px 25px rgba(0,0,0,.25);
-transition:.3s;
-z-index:999;
-}
-
-#topBtn:hover{
-transform:translateY(-5px);
-}
-
-/* Ripple */
-
-.btn{
-position:relative;
-overflow:hidden;
-}
-
-.ripple{
-position:absolute;
-width:10px;
-height:10px;
-background:rgba(255,255,255,.6);
-border-radius:50%;
-transform:translate(-50%,-50%);
-animation:ripple .6s linear;
-}
-
-@keyframes ripple{
-
-from{
-width:0;
-height:0;
-opacity:.8;
-}
-
-to{
-width:400px;
-height:400px;
-opacity:0;
-}
-
-}
-
-/* Cursor Glow */
-
-#cursorGlow{
-position:fixed;
-width:280px;
-height:280px;
-background:radial-gradient(circle,rgba(37,99,235,.13),transparent 70%);
-pointer-events:none;
-transform:translate(-50%,-50%);
-z-index:-1;
-filter:blur(10px);
-}
-
-/* Floating Animation */
-
-.hero img,
-.mentor img{
-animation:floatImage 6s ease-in-out infinite;
-}
-
-@keyframes floatImage{
-
-0%,100%{
-transform:translateY(0);
-}
-
-50%{
-transform:translateY(-15px);
-}
-
-}
-
-/* Timeline Hover */
-
-.box{
-transition:.4s;
-}
-
-.box:hover{
-transform:translateY(-10px) scale(1.03);
-box-shadow:0 20px 45px rgba(37,99,235,.15);
-}
-    </script>
 </html>
