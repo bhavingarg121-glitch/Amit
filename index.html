@@ -201,50 +201,114 @@ nav ul li a.active::after{
 /* IMAGE */
 
 .hero-image{
-  flex:0 0 460px;
-  position:relative;
+  /* ================= HERO ================= */
+
+.hero{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:90px;
+    padding:140px 9% 80px;
+    position:relative;
+}
+
+/* ================= HERO IMAGE ================= */
+
+.hero-image{
+    flex:0 0 440px;
+    position:relative;
 }
 
 .hero-image::before{
-  content:'';
-  position:absolute;
-  top:-30px; left:-30px;
-  width:100%;
-  height:100%;
-  background:linear-gradient(135deg,var(--blue),var(--purple));
-  border-radius:32px;
-  opacity:.14;
-  z-index:0;
+    content:'';
+    position:absolute;
+    top:-25px;
+    left:-25px;
+    width:100%;
+    height:100%;
+    background:linear-gradient(135deg,var(--blue),var(--purple));
+    border-radius:32px;
+    opacity:.12;
+    z-index:0;
 }
 
 .image-box{
-  width:440px;
-  height:520px;
-  border-radius:28px;
-  overflow:hidden;
-  background:#fff;
-  box-shadow:var(--shadow-md);
-  transition:.4s var(--ease);
-  position:relative;
-  z-index:1;
+    width:440px;
+    height:560px;
+    border-radius:28px;
+    overflow:hidden;
+    background:#fff;
+    box-shadow:var(--shadow-md);
+    position:relative;
+    z-index:1;
+    transition:transform .4s var(--ease), box-shadow .4s var(--ease);
 }
 
 .image-box:hover{
-  transform:translateY(-10px);
-  box-shadow:var(--shadow-lg);
+    transform:translateY(-10px);
+    box-shadow:var(--shadow-lg);
 }
 
 .image-box img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center 10%;
-  transition:.5s var(--ease);
-  animation:floatImage 6s ease-in-out infinite;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center top;
+    display:block;
+    transition:transform .5s var(--ease);
+    animation:floatImage 6s ease-in-out infinite;
 }
 
 .image-box:hover img{
-  transform:scale(1.05);
+    transform:scale(1.05);
+}
+
+@keyframes floatImage{
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-14px);
+    }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width:1000px){
+
+    .hero{
+        flex-direction:column;
+        text-align:center;
+        gap:50px;
+    }
+
+    .hero-image{
+        flex:none;
+    }
+
+    .hero-image::before{
+        display:none;
+    }
+
+    .image-box{
+        width:320px;
+        height:420px;
+    }
+}
+
+@media (max-width:600px){
+
+    .hero{
+        padding-top:120px;
+    }
+
+    .image-box{
+        width:250px;
+        height:330px;
+        border-radius:22px;
+    }
 }
 
 /* CONTENT */
@@ -345,35 +409,7 @@ nav ul li a.active::after{
   50%{ transform:translateY(-14px); }
 }
 
-/* Responsive */
 
-@media(max-width:1000px){
-  .hero{
-    flex-direction:column;
-    text-align:center;
-    gap:50px;
-  }
-  .hero-image{ flex:none; }
-  .hero-image::before{ display:none; }
-  .image-box{
-    width:300px;
-    height:300px;
-  }
-  .hero-title{ font-size:48px; }
-  .hero-subtitle{ align-items:center; }
-  .hero-subtitle span.institute small{ text-align:center; }
-}
-
-@media(max-width:600px){
-  .hero{ padding-top:120px; }
-  .image-box{
-    width:230px;
-    height:230px;
-    border-radius:22px;
-  }
-  .hero-title{ font-size:36px; }
-  .hero-subtitle span{ font-size:16px; }
-}
 
 /* ================= SECTION TITLES ================= */
 
