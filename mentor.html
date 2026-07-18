@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Mentor — A Tribute</title>
+<title>My Mentors — A Tribute</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
@@ -43,7 +43,6 @@
   ::selection{ background: var(--gold); color: var(--night-deep); }
   :focus-visible{ outline: 2px solid var(--gold); outline-offset: 3px; }
 
-  /* ---------- starfield ---------- */
   #stars{
     position: fixed;
     inset: 0;
@@ -87,7 +86,6 @@
     z-index: 1;
   }
 
-  /* ---------- hero ---------- */
   .hero{
     padding-top: 100px;
     text-align: center;
@@ -122,7 +120,6 @@
     margin: 50px auto 0;
   }
 
-  /* ---------- reveal ---------- */
   .reveal{
     opacity: 0;
     filter: blur(6px);
@@ -135,7 +132,6 @@
     transform: translateY(0);
   }
 
-  /* ---------- prose ---------- */
   .prose{
     margin-top: 64px;
     font-size: 1.13rem;
@@ -156,7 +152,42 @@
     font-weight: 500;
   }
 
-  /* ---------- teacher vs mentor ---------- */
+  /* ---------- section headers for each person ---------- */
+  .person-header{
+    margin: 90px 0 30px;
+    text-align: center;
+  }
+  .person-header .kicker{
+    font-family: var(--body);
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 14px;
+  }
+  .person-header .name{
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.8rem, 4.5vw, 2.5rem);
+    color: var(--ink);
+    margin: 0 0 8px;
+  }
+  .person-header .role{
+    font-size: 0.92rem;
+    color: var(--ink-dimmer);
+  }
+
+  .dedication{
+    font-family: var(--hand);
+    font-size: 1.6rem;
+    color: var(--gold);
+    text-align: center;
+    max-width: 460px;
+    margin: 34px auto 10px;
+    line-height: 1.4;
+  }
+
   .split{
     margin: 80px 0;
     display: grid;
@@ -196,7 +227,6 @@
     .split-divider{ width: 40px; height: 1px; margin: 0 auto; background: linear-gradient(90deg, transparent, var(--gold-dim), transparent); }
   }
 
-  /* ---------- panel ---------- */
   .panel{
     border: 1px solid var(--panel-line);
     border-radius: 2px;
@@ -212,7 +242,6 @@
     margin-top: 14px;
   }
 
-  /* ---------- constellation of qualities ---------- */
   .constellation-section{
     margin: 100px 0 90px;
     text-align: center;
@@ -259,7 +288,6 @@
   }
   .constellation.lit .const-label{ fill: var(--ink-dim); }
 
-  /* ---------- location note ---------- */
   .location{
     display: flex;
     align-items: center;
@@ -274,7 +302,14 @@
   }
   .location svg{ width: 16px; height: 16px; }
 
-  /* ---------- gratitude closing ---------- */
+  .divider-star{
+    text-align: center;
+    color: var(--gold-dim);
+    font-size: 1.2rem;
+    margin: 90px 0 0;
+    letter-spacing: 0.4em;
+  }
+
   .closing{
     margin-top: 80px;
   }
@@ -288,7 +323,6 @@
     margin: 50px 0;
   }
 
-  /* ---------- final quote plaque ---------- */
   .plaque-wrap{
     margin: 90px 0 50px;
     display: flex;
@@ -344,14 +378,29 @@
 
   <div class="hero">
     <div class="eyebrow">A Tribute</div>
-    <h1 class="title">My Mentor</h1>
-    <p class="subtitle">Behind every meaningful achievement lies a story rarely visible to the world.</p>
+    <h1 class="title">My Mentors</h1>
+    <p class="subtitle">Behind every achievement is someone who believed in you before you believed in yourself.</p>
     <div class="hero-rule"></div>
   </div>
 
   <div class="prose reveal">
-    <p>Behind every meaningful achievement lies a story that is rarely visible to the world — a story of guidance, encouragement, difficult conversations, silent support, and someone who believed in your potential long before you recognized it yourself. For me, that person is my mentor.</p>
+    <p>Every great journey begins with someone who believes in you before you believe in yourself. Mine began with two people — a teacher who raised me like her own, and a mentor who continues to shape the way I think.</p>
   </div>
+
+  <!-- ===================== PRADNYA KHOBRAGADE ===================== -->
+
+  <div class="person-header reveal">
+    <div class="kicker">Chapter One</div>
+    <h2 class="name">Pradnya Khobragade</h2>
+    <div class="role">Government School Teacher, Nagar Parishad Gandhi Vidyalaya, Ballarpur</div>
+  </div>
+
+  <div class="prose reveal">
+    <p>Pradnya Ma'am is one of the most important people in my life. She played a major role in shaping my character from Class 5 to Class 10, caring for me with the love and affection of a mother. While I was in Class 10, I used to study at her home until late at night. She not only taught me Science but also gave me emotional support and the confidence to believe in myself.</p>
+    <p>She inspired me to dream big and motivated me to prepare for the GATE examination. <strong>Whatever I have achieved today, and whatever I achieve in the future, is because of her blessings, guidance and support.</strong> I will always be grateful to her.</p>
+  </div>
+
+  <p class="dedication reveal">To the teacher who cared for me like a mother and shaped the person I am today.</p>
 
   <div class="split reveal">
     <div class="split-col">
@@ -367,19 +416,10 @@
     </div>
   </div>
 
-  <div class="prose reveal">
-    <p>Throughout my academic journey, I have been fortunate to receive guidance from someone who never measured success merely by grades, ranks, or achievements. Instead, I was encouraged to ask better questions, think critically, embrace challenges, and continuously improve myself — not just as a student, but as a human being.</p>
-  </div>
-
   <p class="pull reveal">"I was taught how to think — not what to think."</p>
 
-  <div class="prose reveal">
-    <p>One of the greatest gifts my mentor gave me was not answers, but the ability to discover answers for myself. That lesson has become one of the strongest foundations of my education.</p>
-    <p>There were moments of uncertainty, self-doubt, and difficult decisions when the path ahead seemed unclear. During those times, my mentor's wisdom, patience, and unwavering confidence reminded me that <strong>setbacks are temporary, but learning is permanent.</strong> Every challenge became an opportunity to grow, every mistake became a lesson, and every success became a reminder to remain humble.</p>
-  </div>
-
   <div class="panel reveal">
-    <p style="margin:0; color:var(--ink-dim); font-size:1.05rem;">What I admire most is not simply the knowledge my mentor possesses, but the values that accompany it — qualities that cannot be measured by examinations or certificates, yet they define true greatness.</p>
+    <p style="margin:0; color:var(--ink-dim); font-size:1.05rem;">What I admire most is not simply the knowledge my mentors possess, but the values that accompany it — qualities that cannot be measured by examinations or certificates, yet they define true greatness.</p>
     <div class="panel-note">— the part no scorecard can capture</div>
   </div>
 
@@ -405,22 +445,37 @@
 
   <div class="location reveal">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
-    IIT Kanpur
+    Ballarpur, Maharashtra — where it all began
+  </div>
+
+  <div class="divider-star reveal">✦ ✦ ✦</div>
+
+  <!-- ===================== RISHAV BHAIYYA ===================== -->
+
+  <div class="person-header reveal">
+    <div class="kicker">Chapter Two</div>
+    <h2 class="name">Rishav Bhaiyya</h2>
+    <div class="role">Mentor</div>
   </div>
 
   <div class="prose reveal">
-    <p>As I continue my journey here, I carry these lessons with me every day. Every project I undertake, every problem I solve, every new concept I learn, and every challenge I face is influenced by the mindset my mentor helped cultivate. The impact of a true mentor extends far beyond classrooms and textbooks — it quietly shapes the decisions, character, and aspirations of the people they guide.</p>
-    <p>I believe education is not only about acquiring knowledge but about becoming a person capable of using that knowledge responsibly and meaningfully. My mentor has played an invaluable role in helping me understand this distinction.</p>
+    <p>Where Pradnya Ma'am gave me roots, Rishav Bhaiyya has been a guiding compass in the years since — someone whose mentorship pushed me to keep growing, keep questioning, and keep believing in the path ahead.</p>
+  </div>
+
+  <p class="dedication reveal">Your mentorship will always remain one of the most valuable parts of my journey.</p>
+
+  <div class="prose reveal">
+    <p>As I continue on this path, I carry the lessons of both my teacher and my mentor with me every day. Every problem I solve, every concept I learn, and every challenge I face is shaped by the mindset they helped me build. Their impact reaches far beyond classrooms and conversations — it quietly shapes who I am becoming.</p>
   </div>
 
   <div class="closing reveal">
     <p>Whatever milestones I achieve in the future, they will never be mine alone. Behind each accomplishment will always be the invisible contribution of those who invested their time, wisdom, and belief in me.</p>
-    <p class="emphasis">My mentor's guidance will forever remain one of the most significant influences in my life — and for that, I will always be deeply grateful.</p>
+    <p class="emphasis">Their guidance will forever remain among the most significant influences in my life — and for that, I will always be deeply grateful.</p>
   </div>
 
   <div class="plaque-wrap reveal">
     <div class="plaque">
-      <p>"The greatest mentors do not create followers. They create independent thinkers, lifelong learners, and individuals who one day become mentors themselves. If, in the future, I am able to inspire even one student the way my mentor inspired me, I will consider that one of the greatest achievements of my life."</p>
+      <p>A mentor plants seeds of courage, discipline, and hope without expecting anything in return. Years later, those seeds grow into meaningful lives and fulfilled dreams.</p>
     </div>
   </div>
 
@@ -429,7 +484,6 @@
 </div>
 
 <script>
-  // generate starfield
   const starsContainer = document.getElementById('stars');
   const STAR_COUNT = 90;
   for(let i=0;i<STAR_COUNT;i++){
@@ -445,7 +499,6 @@
     starsContainer.appendChild(s);
   }
 
-  // reveal on scroll
   const revealEls = document.querySelectorAll('.reveal');
   if('IntersectionObserver' in window){
     const io = new IntersectionObserver((entries)=>{
@@ -461,7 +514,6 @@
     revealEls.forEach(el=>el.classList.add('lit'));
   }
 
-  // constellation lights up separately (adds .lit to inner element)
   const constEl = document.getElementById('constellation');
   if('IntersectionObserver' in window){
     const io2 = new IntersectionObserver((entries)=>{
