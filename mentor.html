@@ -178,6 +178,20 @@
     color: var(--ink-dimmer);
   }
 
+  .portrait-wrap{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 26px;
+  }
+  .portrait{
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--panel-line-strong);
+    box-shadow: 0 0 0 6px var(--night-deep), 0 0 24px var(--gold-soft);
+  }
+
   .dedication{
     font-family: var(--hand);
     font-size: 1.6rem;
@@ -390,6 +404,10 @@
   <!-- ===================== PRADNYA KHOBRAGADE ===================== -->
 
   <div class="person-header reveal">
+    <!-- PHOTO: replace src below with the path/filename of Pradnya Ma'am's photo -->
+    <div class="portrait-wrap">
+      <img class="portrait" src="pradnya-khobragade.jpg" alt="Pradnya Khobragade">
+    </div>
     <div class="kicker">Chapter One</div>
     <h2 class="name">Pradnya Khobragade</h2>
     <div class="role">Government School Teacher, Nagar Parishad Gandhi Vidyalaya, Ballarpur</div>
@@ -453,6 +471,10 @@
   <!-- ===================== RISHAV BHAIYYA ===================== -->
 
   <div class="person-header reveal">
+    <!-- PHOTO: replace src below with the path/filename of Rishav Bhaiyya's photo -->
+    <div class="portrait-wrap">
+      <img class="portrait" src="rishav-bhaiyya.jpg" alt="Rishav Bhaiyya">
+    </div>
     <div class="kicker">Chapter Two</div>
     <h2 class="name">Rishav Bhaiyya</h2>
     <div class="role">Mentor</div>
